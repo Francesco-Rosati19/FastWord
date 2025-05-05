@@ -1,0 +1,62 @@
+body{
+    font-family: Arial, sans-serif;
+}
+h1 {
+    color: rgb(54, 173, 133);
+    text-align: center;
+}
+.titolo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.logo {
+    width: 100px; 
+    height: auto;
+    border-radius: 8px; 
+}
+
+.bottoni a{
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: rgb(54, 173, 133);
+    color:white;    
+    border-radius: 5px;
+    font-weight: bold;
+}
+.bottoni a:hover {
+    background-color: blue;
+} 
+pre{
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    color: black;
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    margin-top: 100px;
+}
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 60%;
+    margin-top:50px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: rgb(54, 173, 133);
+    color: white;
+}
+
