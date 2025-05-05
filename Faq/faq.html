@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang ="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FAQ</title>
+        <link rel="stylesheet" href="styleFaq.css">
+       
+    </head>
+    <body>
+
+       
+        <div class="header">
+            <h1>FAQ</h1>
+            <img src="faq.jpeg" alt="Icona Titolo">
+            
+        </div>
+        
+        <div class="altoadestra">
+            <a href="../Index/index.html">HOME</a>
+        </div>
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Domande più frequenti</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr tabindex="0" class="question">
+                        <td>
+                            domanda
+                            <div class="answer">Risposta</div>
+                        </td>
+                    </tr>
+                    <tr tabindex="0" class="question">
+                        <td>
+                            domanda
+                            <div class="answer">Risposta</div>
+                        </td>
+                    </tr>
+                    <tr tabindex="0" class="question">
+                        <td>
+                            domanda
+                            <div class="answer">Risposta</div>
+                        </td>
+                    </tr>
+                    <tr tabindex="0" class="question">
+                        <td>
+                            domanda
+                            <div class="answer">Risposta</div>
+                        </td>
+                    </tr>
+                    <tr tabindex="0" class="question">
+                        <td>
+                            domanda
+                            <div class="answer">Risposta</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script>
+            const questions = document.querySelectorAll('.question');
+    
+            questions.forEach(q => {
+                q.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        toggleAnswer(this);
+                    }
+                });
+    
+                q.addEventListener('click', function() {
+                    toggleAnswer(this);
+                });
+            });
+    
+            function toggleAnswer(selectedRow) {
+                questions.forEach(row => {
+                    const answer = row.querySelector('.answer');
+                    if (row !== selectedRow && answer) {
+                        answer.style.display = 'none';
+                    }
+                });
+                const answer = selectedRow.querySelector('.answer');
+                if (answer) {
+                    answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+                }
+            }
+        </script>
+        
+        
+    </body>
+</html>
