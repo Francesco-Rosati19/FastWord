@@ -1,38 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
-    margin: 0;
+    background-image: url("Persona_al_pc.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    margin:0;
     padding: 0;
+    height: 100vh;
 }
-
-.titolo {
+.container{
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 40px;
+    justify-content: space-between;
+    margin-top: 10px;
 }
-
 .titolo h1 {
     font-family: 'Raleway', sans-serif;
     font-size: 36px;
     background: linear-gradient(90deg, rgb(54, 173, 133), rgb(0, 119, 255));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+    color: transparent;
+
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     margin: 0;
     transition: transform 0.3s ease;
 }
-
 .titolo h1:hover {
     transform: scale(1.05);
 }
-
-.logo {
-    width: 60px;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.bottoni {
+    display: flex;
+    gap: 5px; 
 }
+.bottoni a{
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: rgb(54, 173, 133);
+    color:white;    
+    border-radius: 5px;
+    font-weight: bold;
+}
+.bottoni a:hover {
+    background-color: blue;
+} 
