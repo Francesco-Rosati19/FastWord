@@ -1,36 +1,60 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url("Persona_al_pc.jpg");
+    background-image: url("sfondo.jpg");
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
     margin:0;
     padding: 0;
     height: 100vh;
+
 }
 .container{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: 5px;
 }
-.titolo h1 {
-    font-family: 'Raleway', sans-serif;
-    font-size: 36px;
-    background: linear-gradient(90deg, rgb(54, 173, 133), rgb(0, 119, 255));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    background-clip: text;
-    color: transparent;
-
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-    margin: 0;
-    transition: transform 0.3s ease;
+.logo{
+    width:150px;
+    height: 150px;
+    clip-path: circle(42%);
+    object-fit: cover;
 }
-.titolo h1:hover {
+/*BOTTONE PROVA GRATUITA*/
+.prova{
+    display: flex;
+    justify-content:center;
+    margin-top:15vh;
+    margin-left: 5%;
+    width: 90%;
+    
+}
+.prova a{
+    text-decoration: none;
+    padding: 5vh 8vw;
+    background: linear-gradient(135deg,rgb(54, 173, 133),#00bfa6);
+    color:white;
+    border-radius: 15px;  
+    font-weight: bold;
+    font-size: 2vw;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(127, 255, 212, 0.6), 0 0 30px rgba(0, 191, 166, 0.4);
+    transition: all 0.3 ease-in-out;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    font-family: 'Poppins', sans-serif; 
+    text-shadow: 3px 3px 15px rgba(0, 255, 255, 0.7), 0 0 30px rgba(0, 191, 166, 0.5);      
+}
+.prova a:hover {
+    background: linear-gradient(135deg, #00d4b0, aquamarine);
+    box-shadow: 0 0 15px rgba(0, 255, 191, 0.6), 0 0 30px rgba(127, 255, 212, 0.4);
     transform: scale(1.05);
-}
+} 
+/*---------------------------------------------*/
+
+/*LAYOUT ALTRI BOTTONI*/
+
 .bottoni {
     display: flex;
     gap: 5px; 
@@ -46,3 +70,32 @@ body {
 .bottoni a:hover {
     background-color: blue;
 } 
+/*BOX DI SCRITTURA*/
+.box-container{
+    position: relative;
+    width: 100%;
+    height: 900px;
+    margin-top: 30vh;
+}
+.box{
+    position:absolute;
+    width: 350px;
+    padding: 50px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    font-size: 25px;
+    font-weight: bold;
+}
+#box1{
+    top:30px;
+    left: 30px;
+}
+#box2{
+    top:400px;
+    right:30px;
+}
+#box3{
+    top:700px;
+    left:30px;
+}
