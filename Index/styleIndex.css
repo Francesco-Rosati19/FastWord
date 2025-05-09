@@ -99,3 +99,106 @@ body {
     top:700px;
     left:30px;
 }
+/*------------------------------------------------------------------------*/
+
+/*POPUP DI REGISTRAZIONE E LOGIN*/
+.popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+}
+
+.popup-content input {
+    width: 90%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+.popup-content button[type="submit"] {
+    padding: 10px;
+    width: 100%;
+    background: rgb(54, 173, 133);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.popup-content .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+/*---------------------------------------------------------------------*/
+
+/*BOTTONI REGISTRATI-ACCEDI*/
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.tab-button {
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    background: #ddd;
+    flex: 1;
+    font-weight: bold;
+}
+
+.tab-button.active {
+    background: rgb(54, 173, 133);
+    color: white;
+}
+
+.tab-content {
+    display: block;
+}
+
+.tab-content.hidden {
+    display: none;
+}
+/*-----------------------------------------------------------*/
+
+/*LAYOUT PASSWORD E CONFERMA*/
+.password-wrapper {
+    position: relative;
+    width: 90%;
+    margin: 10px 0;
+    left:5px;
+    margin-top: 10px ;
+}
+.password-wrapper input {
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}

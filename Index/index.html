@@ -1,38 +1,137 @@
 <!DOCTYPE html>
 <html lang="it">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>FastWord</title>
-        <link rel="stylesheet" href="styleIndex.css">
-    </head>
-    <body>
-        <div class="container">
-            <div class="titolo">
-               <img src="logo.jpg" alt="Logo" class="logo">
-            </div>
-            <div class="bottoni">
-                <a href="../Gioco/gioco.html"> GIOCO </a>
-                <a href="../Faq/faq.html"> FAQ </a>
-                <a href="../Info/info.html"> CHI SIAMO</a>
-                <a href="../Login/login.html" class="login"> LOGIN </a>
-            </div>    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastWord</title>
+    <link rel="stylesheet" href="styleIndex.css">
+</head>
+<body>
+    <div class="container">
+        <div class="titolo">
+            <img src="logo.jpg" alt="Logo" class="logo">
         </div>
-        <div class="prova">
-            <a href="../prova">SU! FACCIAMO UNA PROVA</a> 
+        <div class="bottoni">
+            <a href="../Gioco/gioco.html"> GIOCO </a>
+            <a href="../Faq/faq.html"> FAQ </a>
+            <a href="../Info/info.html"> CHI SIAMO</a>
+            <a href="#" class="login"> LOGIN </a>
+        </div>    
+    </div>
+
+    <div class="prova">
+        <a href="../prova">SU! FACCIAMO UNA PROVA</a> 
+    </div>
+
+    <div class="box-container">
+        <div class="box" id="box1">
+            Imparare e Giocare.
+            Con FastWord tutto è possibile. Vincere premi e portare a casa un pò di soldi non fa male a nessuno.
+            Non fartelo raccontare ma provalo in prima persona
         </div>
-        <div class="box-container">
-            <div class="box" id="box1">     Imparare e Giocare.
-                Con FastWord tutto è possibile. Vincere premi e portare a casa un pò di soldi non fa male a nessuno.
-                Non fartelo raccontare ma provalo in prima persona
-            </div>
-            <div class="box" id="box2"> Ciao
-                Digitare e ragionare allo stesso momento aiuta il ragionamento.
-                Il numero di persone che abbiamo aiutato negli  ultimi anni
-                si agira intorno ai 2000 e il 90% delle persone sono 
-                soddisfate di aver imparato e giocato con noi
-            </div>
-            <div class="box" id="box3"> BOX 3</div>
+        <div class="box" id="box2">
+            Ciao
+            Digitare e ragionare allo stesso momento aiuta il ragionamento.
+            Il numero di persone che abbiamo aiutato negli ultimi anni
+            si aggira intorno ai 2000 e il 90% delle persone sono 
+            soddisfatte di aver imparato e giocato con noi
         </div>
-    </body>
+        <div class="box" id="box3"> BOX 3</div>
+    </div>
+
+    <!--CONTAINER POPUP-->
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <span class="close" onclick="togglePopup()">&times;</span>
+            <div class="tabs">
+                <button class="tab-button active" onclick="showTab('loginTab')">Accedi</button>
+                <button class="tab-button" onclick="showTab('registerTab')">Registrati</button>
+            </div>
+
+            <!-- LOGIN TAB -->
+            <div id="loginTab" class="tab-content">
+                <form action="login.php" method="POST">
+                    <input type="email" name="email" placeholder="Email" required><br>
+                    <input type="password" name="password" placeholder="Password" required><br>
+                    <button type="submit">Accedi</button>
+                </form>
+            </div>
+
+            <!-- REGISTER TAB -->
+            <div id="registerTab" class="tab-content hidden">
+                <form id=registerForm action="register.php" method="POST">
+                    <input type="text" name="nome" placeholder="Nome" required><br>
+                    <input type="text" name="cognome" placeholder="Cognome" required><br>
+                    <input type="date" name="data" placeholder="Data di nascita" required><br>
+                    <input type="email" name="email" placeholder="Email" required><br>
+                    <!-- Password -->
+                    <div class="password-wrapper"> 
+                         <input type="password" id="password" name="password" placeholder="Password" required >
+                         <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
+                    </div>
+                    <!-- Conferma Password -->
+                    <div class="password-wrapper">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Conferma Password" required>
+                        <span class="toggle-password" onclick="togglePassword('confirm_password', this)">👁️</span>
+                    </div>
+                    <button type="submit">Registrati</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.login').addEventListener('click', function(event) {
+            event.preventDefault();
+            togglePopup();
+        });
+    
+        function togglePopup() {
+            document.getElementById('popup').classList.toggle('hidden');
+        }
+    
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+    
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            const activeButton = Array.from(document.querySelectorAll('.tab-button')).find(btn =>
+                btn.textContent.toLowerCase().includes(tabId === 'loginTab' ? 'accedi' : 'registrati')
+            );
+            if (activeButton) activeButton.classList.add('active');
+        }
+        /*Controllo data e controllo password*/
+        document.getElementById("registerForm").addEventListener("submit", function(e) {
+            const dataNascita = new Date(this.data.value);
+            const oggi = new Date();
+            const eta = oggi.getFullYear() - dataNascita.getFullYear();
+            const m = oggi.getMonth() - dataNascita.getMonth();
+            const maggiorenne = (eta > 18 || (eta === 18 && (m > 0 || (m === 0 && oggi.getDate() >= dataNascita.getDate()))));
+    
+            if (!maggiorenne) {
+                e.preventDefault();
+                alert("Devi avere almeno 18 anni per registrarti.");
+                return;
+            }
+    
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            if (password !== confirm) {
+                e.preventDefault();
+                alert("Le password non coincidono.");
+                return;
+            }
+        });
+        /*ICONE PASSWORD*/
+        function togglePassword(id, icon) {
+            const field = document.getElementById(id);
+            if (field.type === "password") {
+                field.type = "text";
+                icon.textContent = "🙈";
+            } else {
+                field.type = "password";
+                icon.textContent = "👁️";
+            }
+        }
+    </script>
+</body>
 </html>
