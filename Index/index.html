@@ -50,7 +50,7 @@
 
             <!-- LOGIN TAB -->
             <div id="loginTab" class="tab-content">
-                <form action="../Login/login.php" method="POST">
+                <form action="../Profilo/profilo.php" method="POST">
                     <input type="email" name="email" placeholder="Email" required><br>
                     <input type="password" name="password" placeholder="Password" required><br>
                     <button type="submit">Accedi</button>
@@ -60,6 +60,7 @@
             <!-- REGISTER TAB -->
             <div id="registerTab" class="tab-content hidden">
                 <form id=registerForm action="../Login/register.php" method="POST">
+                    <input type="text" name="username" placeholder="User" required><br>
                     <input type="text" name="nome" placeholder="Nome" required><br>
                     <input type="text" name="cognome" placeholder="Cognome" required><br>
                     <input type="date" name="data" placeholder="Data di nascita" required><br>
@@ -133,6 +134,34 @@
                 icon.textContent = "👁️";
             }
         }
+        const params = new URLSearchParams(window.location.search);
+         if (params.get('errore') === 'duplicato_username' || params.get('errore')=== 'duplicato_email') {
+            const popup = document.createElement('div');
+            if(params.get('errore')==='duplicato_username')
+               popup.textContent = "⚠️ Username già registrato. Per favore, scegli un altro.";
+            else
+               popup.textContent = "⚠️ Email già registrata. Per favore, scegli un'altra email.";
+
+            popup.style.position = 'fixed';
+            popup.style.top = '20px';
+            popup.style.left = '50%';
+            popup.style.transform = 'translateX(-50%)';
+            popup.style.background = '#ffdddd';
+            popup.style.color = '#a00';
+            popup.style.border = '1px solid #a00';
+            popup.style.padding = '15px 25px';
+            popup.style.borderRadius = '8px';
+            popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.1)';
+            popup.style.zIndex = '1000';
+
+            document.body.appendChild(popup);
+            setTimeout(() => {
+            popup.remove();
+            }, 4000);
+       
+        }
+        
+
     </script>
 </body>
 </html>
