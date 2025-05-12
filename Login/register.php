@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
     header("Content-Type: application/json");
     exit();
@@ -41,9 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 
         // Reindirizza se entrambe le query hanno avuto successo
         if ($result1 && $result2) {
-            header("Location: ../Profilo/profilo.php?username=" . urlencode($username));
+             $_SESSION['username'] = $user['username'];
+             $_SESSION['email'] = $user['email'];
+            header("Location: ../Profilo/profilo.php?");
             exit();
-    
+        }
+        else{
+            echo "Errore durante la registrazione";
         }
     } else {
         echo "Errore di connessione al database.";

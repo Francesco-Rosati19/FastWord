@@ -50,7 +50,7 @@
 
             <!-- LOGIN TAB -->
             <div id="loginTab" class="tab-content">
-                <form action="../Profilo/profilo.php" method="POST">
+                <form action="../Login/login.php" method="POST">
                     <input type="email" name="email" placeholder="Email" required><br>
                     <input type="password" name="password" placeholder="Password" required><br>
                     <button type="submit">Accedi</button>
@@ -65,16 +65,20 @@
                     <input type="text" name="cognome" placeholder="Cognome" required><br>
                     <input type="date" name="data" placeholder="Data di nascita" required><br>
                     <input type="email" name="email" placeholder="Email" required><br>
+                    
                     <!-- Password -->
                     <div class="password-wrapper"> 
-                         <input type="password" id="password" name="password" placeholder="Password" required >
-                         <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
+                        <input type="password" id="password" name="password" placeholder="Password" required >
+                        <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
                     </div>
+                    <div id="passwordError" class="error-message"></div>
+
                     <!-- Conferma Password -->
                     <div class="password-wrapper">
                         <input type="password" id="confirm_password" name="confirm_password" placeholder="Conferma Password" required>
                         <span class="toggle-password" onclick="togglePassword('confirm_password', this)">👁️</span>
                     </div>
+                    <div id="confirmError" class="error-message"></div>
                     <button type="submit">Registrati</button>
                 </form>
             </div>
@@ -114,13 +118,22 @@
                 return;
             }
     
-            const password = document.getElementById('password').value;
-            const confirm = document.getElementById('confirm_password').value;
-            if (password !== confirm) {
-                e.preventDefault();
-                alert("Le password non coincidono.");
-                return;
+           const password = document.getElementById('password').value;
+           const confirm = document.getElementById('confirm_password').value;
+           let valid = true;
+
+           if (password.length < 8) {
+              document.getElementById('passwordError').textContent = "La password deve contenere almeno 8 caratteri.";
+              valid = false;
+           }
+
+           if (password !== confirm) {
+               document.getElementById('confirmError').textContent = "Le password non coincidono.";
+               valid = false;
             }
+
+            if (!valid) e.preventDefault(); // Blocca l'invio solo se ci sono errori
+
             
         });
         /*ICONE PASSWORD*/
@@ -134,13 +147,17 @@
                 icon.textContent = "👁️";
             }
         }
-        const params = new URLSearchParams(window.location.search);
-         if (params.get('errore') === 'duplicato_username' || params.get('errore')=== 'duplicato_email') {
+         const params = new URLSearchParams(window.location.search);
+         if (params.get('errore') === 'duplicato_username' || params.get('errore')=== 'duplicato_email' || params.get('errore')==='password' || params.get('errore')=='email') {
             const popup = document.createElement('div');
             if(params.get('errore')==='duplicato_username')
                popup.textContent = "⚠️ Username già registrato. Per favore, scegli un altro.";
-            else
+            if(params.get('errore')==='duplicato_email')
                popup.textContent = "⚠️ Email già registrata. Per favore, scegli un'altra email.";
+            if(params.get('errore')==='password')
+               popup.textContent = "⚠️ Password errata";
+            if(params.get('errore')==='email')
+               popup.textContent = "⚠️ Email errata";
 
             popup.style.position = 'fixed';
             popup.style.top = '20px';

@@ -202,3 +202,9 @@ body {
     transform: translateY(-50%);
     cursor: pointer;
 }
+
+.error-message {
+    color: #a00;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
