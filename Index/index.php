@@ -1,3 +1,15 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['login_error']) && !isset($_SESSION['register_error'])) {
+       unset($_SESSION['old_register_data']);
+    }
+    $loginError = $_SESSION['login_error'] ?? null;
+    $registerError = $_SESSION['register_error'] ?? null;
+    $oldRegisterData = $_SESSION['old_register_data'] ?? [];
+
+    unset($_SESSION['login_error'], $_SESSION['register_error']);
+?>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -52,37 +64,40 @@
             <div id="loginTab" class="tab-content">
                 <form action="../Login/login.php" method="POST">
                     <input type="email" name="email" placeholder="Email" required><br>
+                    <div id="loginEmailError" class="error-message"></div>
                     <input type="password" name="password" placeholder="Password" required><br>
+                    <div id="loginPasswordError" class="error-message"></div>
                     <button type="submit">Accedi</button>
                 </form>
             </div>
 
             <!-- REGISTER TAB -->
             <div id="registerTab" class="tab-content hidden">
-                <form id=registerForm action="../Login/register.php" method="POST">
-                    <input type="text" name="username" placeholder="User" required><br>
-                    <input type="text" name="nome" placeholder="Nome" required><br>
-                    <input type="text" name="cognome" placeholder="Cognome" required><br>
-                    <input type="date" name="data" placeholder="Data di nascita" required><br>
-                    <input type="email" name="email" placeholder="Email" required><br>
-                    
-                    <!-- Password -->
-                    <div class="password-wrapper"> 
-                        <input type="password" id="password" name="password" placeholder="Password" required >
-                        <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
-                    </div>
-                    <div id="passwordError" class="error-message"></div>
+                <form id="registerForm" action="../Login/register.php" method="POST">
+                    <input type="text" name="username" placeholder="Username" value="<?= htmlspecialchars($oldRegisterData['username'] ?? '') ?>" required><br>
+                    <div id="registerUsernameError" class="error-message"></div>
+                    <input type="text" name="nome" placeholder="Nome" value="<?= htmlspecialchars($oldRegisterData['nome'] ?? '') ?>" required><br>
+                    <input type="text" name="cognome" placeholder="Cognome" value="<?= htmlspecialchars($oldRegisterData['cognome'] ?? '') ?>" required><br>
+                    <input type="date" name="data" placeholder="Data di nascita" value="<?= htmlspecialchars($oldRegisterData['data'] ?? '') ?>" required><br>
+                    <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($oldRegisterData['email'] ?? '') ?>" required><br>
+                    <div id="registerEmailError" class="error-message"></div>
 
-                    <!-- Conferma Password -->
-                    <div class="password-wrapper">
-                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Conferma Password" required>
-                        <span class="toggle-password" onclick="togglePassword('confirm_password', this)">👁️</span>
-                    </div>
-                    <div id="confirmError" class="error-message"></div>
-                    <button type="submit">Registrati</button>
-                </form>
-            </div>
+                <!-- Password -->
+                <div class="password-wrapper"> 
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
+                </div>
+                <div id="passwordError" class="error-message"></div>
+                <!-- Conferma Password -->
+                <div class="password-wrapper">
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Conferma Password" required>
+                    <span class="toggle-password" onclick="togglePassword('confirm_password', this)">👁️</span>
+                </div>
+                <div id="confirmError" class="error-message"></div>
+                <button type="submit">Registrati</button>
+            </form>
         </div>
+      </div>
     </div>
     <script>
         document.querySelector('.login').addEventListener('click', function(event) {
@@ -147,38 +162,26 @@
                 icon.textContent = "👁️";
             }
         }
-         const params = new URLSearchParams(window.location.search);
-         if (params.get('errore') === 'duplicato_username' || params.get('errore')=== 'duplicato_email' || params.get('errore')==='password' || params.get('errore')=='email') {
-            const popup = document.createElement('div');
-            if(params.get('errore')==='duplicato_username')
-               popup.textContent = "⚠️ Username già registrato. Per favore, scegli un altro.";
-            if(params.get('errore')==='duplicato_email')
-               popup.textContent = "⚠️ Email già registrata. Per favore, scegli un'altra email.";
-            if(params.get('errore')==='password')
-               popup.textContent = "⚠️ Password errata";
-            if(params.get('errore')==='email')
-               popup.textContent = "⚠️ Email errata";
-
-            popup.style.position = 'fixed';
-            popup.style.top = '20px';
-            popup.style.left = '50%';
-            popup.style.transform = 'translateX(-50%)';
-            popup.style.background = '#ffdddd';
-            popup.style.color = '#a00';
-            popup.style.border = '1px solid #a00';
-            popup.style.padding = '15px 25px';
-            popup.style.borderRadius = '8px';
-            popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.1)';
-            popup.style.zIndex = '1000';
-
-            document.body.appendChild(popup);
-            setTimeout(() => {
-            popup.remove();
-            }, 4000);
-       
-        }
         
+        const loginError = "<?= $loginError ?>";
+        const registerError = "<?= $registerError ?>";
 
+        if (loginError) {
+            togglePopup();
+            showTab('loginTab');
+            if(loginError === 'email')
+                document.getElementById('loginEmailError').textContent = "Email errata. Per favore, riprova.";
+            else
+                document.getElementById('loginPasswordError').textContent = "Password errata. Per favore, riprova.";
+         }
+        if (registerError) {
+            togglePopup();
+            showTab('registerTab');
+            if (registerError === 'duplicato_username')
+                document.getElementById('registerUsernameError').textContent = "⚠️ Username già registrato. Scegli un altro.";
+            else
+                document.getElementById('registerEmailError').textContent = "⚠️ Email già registrata. Usa un'altra email.";
+        }
     </script>
 </body>
 </html>

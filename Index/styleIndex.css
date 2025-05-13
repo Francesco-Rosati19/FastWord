@@ -202,7 +202,9 @@ body {
     transform: translateY(-50%);
     cursor: pointer;
 }
+/*-----------------------------------------------------------*/
 
+/*LAYOUT DEGLI ERRORI SOTTO I CAMPI EMAIL,USERNAME E PASSWORD*/
 .error-message {
     color: #a00;
     font-size: 0.9em;
