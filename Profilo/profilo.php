@@ -3,6 +3,75 @@
    $passwordError  = $_SESSION['error_message'] ?? null;
    $successMessage = $_SESSION['success_message'] ?? null;
 
+   // Verifica se l'utente è autenticato
+   if (!isset($_SESSION['username'])) {
+       header("Location: ../Index/index.php");
+       exit();
+   }
+
+   // Connessione al database FastWord
+   $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
+
+   //parte die da eliminare al massimo sostituire con un errore
+   /*if (!$dbconn) {
+       die("Errore di connessione al database");
+   }*/
+
+   // Recupera i dati dell'utente
+   $query = "SELECT * FROM utentedati WHERE username = $1";
+   $result = pg_query_params($dbconn, $query, array($_SESSION['username']));
+   $userData = pg_fetch_assoc($result);
+
+   // Recupera i punteggi medi di tutti gli utenti per il terzo grafico
+   $query_all_scores = "SELECT punteggio_medio FROM utentedati";
+   $result_all_scores = pg_query($dbconn, $query_all_scores);
+   
+   // Inizializza i contatori per ogni range
+   $range_0_25 = 0;
+   $range_26_50 = 0;
+   $range_51_75 = 0;
+   $range_76_100 = 0;
+   $total_users = 0;
+
+   // Calcola le percentuali per ogni range
+   while ($row = pg_fetch_assoc($result_all_scores)) {
+       $score = (float)$row['punteggio_medio'];
+       if ($score >= 0 && $score <= 25) {
+           $range_0_25++;
+       } elseif ($score <= 50) {
+           $range_26_50++;
+       } elseif ($score <= 75) {
+           $range_51_75++;
+       } else {
+           $range_76_100++;
+       }
+       $total_users++;
+   }
+
+   // Calcola le percentuali
+   $percent_0_25 = ($range_0_25 / $total_users) * 100;
+   $percent_26_50 = ($range_26_50 / $total_users) * 100;
+   $percent_51_75 = ($range_51_75 / $total_users) * 100;
+   $percent_76_100 = ($range_76_100 / $total_users) * 100;
+
+   // Prepara i dati per il primo grafico
+   $velocitaMesi = [
+       'Gennaio' => (float)$userData['velocita_gennaio'],
+       'Febbraio' => (float)$userData['velocita_febbraio'],
+       'Marzo' => (float)$userData['velocita_marzo'],
+       'Aprile' => (float)$userData['velocita_aprile'],
+       'Maggio' => (float)$userData['velocita_maggio'],
+       'Giugno' => (float)$userData['velocita_giugno'],
+       'Luglio' => (float)$userData['velocita_luglio'],
+       'Agosto' => (float)$userData['velocita_agosto'],
+       'Settembre' => (float)$userData['velocita_settembre'],
+       'Ottobre' => (float)$userData['velocita_ottobre'],
+       'Novembre' => (float)$userData['velocita_novembre'],
+       'Dicembre' => (float)$userData['velocita_dicembre']
+   ];
+
+   $precisione = (float)$userData['precisione'];
+   $punteggioMedio = (float)$userData['punteggio_medio'];
 
    unset($_SESSION['error_message'], $_SESSION['success_message']);
 ?>
@@ -38,11 +107,11 @@
                         <canvas id="progressChart"></canvas>
                     </div>
                     <div class="chart-wrapper">
-                        <h3>Distribuzione Punteggi</h3>
+                        <h3>Percentuale errori</h3>
                         <canvas id="pieChart"></canvas>
                     </div>
                     <div class="chart-wrapper">
-                        <h3>Miglioramenti Mensili</h3>
+                        <h3>Distribuzione giocatori</h3>
                         <canvas id="improvementChart"></canvas>
                     </div>
                 </div>
@@ -160,56 +229,25 @@
             document.getElementById(sectionId).classList.add('active');
         }
 
-        // Dati di esempio per i grafici
-        const progressData = {
-            labels: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
-            datasets: [{
-                label: 'Punteggio',
-                data: [65, 70, 75, 80, 85, 90],
-                borderColor: '#2ecc71',
-                tension: 0.4,
-                fill: false
-            }]
-        };
+        // Dati per i grafici dal database
+        const velocitaMesi = <?php echo json_encode($velocitaMesi); ?>;
+        const precisione = <?php echo $precisione; ?>;
+        const punteggioMedio = <?php echo $punteggioMedio; ?>;
 
-        const pieData = {
-            labels: ['< 60', '60-70', '70-80', '80-90', '> 90'],
-            datasets: [{
-                data: [10, 20, 30, 25, 15],
-                backgroundColor: [
-                    '#e74c3c',
-                    '#f39c12',
-                    '#3498db',
-                    '#2ecc71',
-                    '#9b59b6'
-                ]
-            }]
-        };
-
-        const improvementData = {
-            labels: ['Principiante (0-30)', 'Intermedio (31-60)', 'Avanzato (61-80)', 'Esperto (81-100)'],
-            datasets: [{
-                data: [15, 35, 30, 20],
-                backgroundColor: [
-                    '#e74c3c',
-                    '#f39c12',
-                    '#3498db',
-                    '#2ecc71'
-                ]
-            }]
-        };
-
-        // Configurazione dei grafici
+        // Configurazione del grafico di progresso
         const progressConfig = {
             type: 'line',
-            data: progressData,
+            data: {
+                labels: Object.keys(velocitaMesi),
+                datasets: [{
+                    label: 'Velocità di Digitazione (WPM)',
+                    data: Object.values(velocitaMesi),
+                    borderColor: 'rgb(54, 173, 133)',
+                    tension: 0.1
+                }]
+            },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    }
-                },
                 scales: {
                     y: {
                         beginAtZero: true
@@ -218,22 +256,46 @@
             }
         };
 
+        // Configurazione del grafico a torta
         const pieConfig = {
-            type: 'pie',
-            data: pieData,
+            type: 'doughnut',
+            data: {
+                labels: ['Precisione', 'Errori'],
+                datasets: [{
+                    data: [precisione, 100 - precisione],
+                    backgroundColor: ['rgb(54, 173, 133)', '#e74c3c']
+                }]
+            },
             options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    }
-                }
+                responsive: true
             }
         };
 
+        // Configurazione del grafico di percentuale
         const improvementConfig = {
             type: 'pie',
-            data: improvementData,
+            data: {
+                labels: [
+                    'Principiante (0-25)',
+                    'Intermedio (26-50)',
+                    'Avanzato (51-75)',
+                    'Esperto (76-100)'
+                ],
+                datasets: [{
+                    data: [
+                        <?php echo $percent_0_25; ?>,
+                        <?php echo $percent_26_50; ?>,
+                        <?php echo $percent_51_75; ?>,
+                        <?php echo $percent_76_100; ?>
+                    ],
+                    backgroundColor: [
+                        '#e74c3c',  
+                        '#f39c12',  
+                        '#3498db',  
+                        '#2ecc71'   
+                    ]
+                }]
+            },
             options: {
                 responsive: true,
                 plugins: {
@@ -243,18 +305,23 @@
                     title: {
                         display: true,
                         text: 'Distribuzione Livelli Utenti'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw.toFixed(1)}%`;
+                            }
+                        }
                     }
                 }
             }
         };
 
         // Inizializzazione dei grafici
-        window.onload = function() {
-            showSection('statistiche');
-            new Chart(document.getElementById('progressChart'), progressConfig);
-            new Chart(document.getElementById('pieChart'), pieConfig);
-            new Chart(document.getElementById('improvementChart'), improvementConfig);
-        }
+        new Chart(document.getElementById('progressChart'), progressConfig);
+        new Chart(document.getElementById('pieChart'), pieConfig);
+        new Chart(document.getElementById('improvementChart'), improvementConfig);
+
         //Pulsante di modifica password
         function togglePopup() {
             const popup = document.getElementById('changePasswordPopup');
