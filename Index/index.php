@@ -7,6 +7,7 @@
     $registerError = $_SESSION['register_error'] ?? null;
     $oldRegisterData = $_SESSION['old_register_data'] ?? [];
 
+
     unset($_SESSION['login_error'], $_SESSION['register_error']);
 ?>
 
@@ -170,9 +171,9 @@
             togglePopup();
             showTab('loginTab');
             if(loginError === 'email')
-                document.getElementById('loginEmailError').textContent = "Email errata. Per favore, riprova.";
+                document.getElementById('loginEmailError').textContent = "⚠️Email errata. Per favore, riprova.";
             else
-                document.getElementById('loginPasswordError').textContent = "Password errata. Per favore, riprova.";
+                document.getElementById('loginPasswordError').textContent = "⚠️Password errata. Per favore, riprova.";
          }
         if (registerError) {
             togglePopup();

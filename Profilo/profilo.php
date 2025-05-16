@@ -1,3 +1,11 @@
+<?php
+   session_start();
+   $passwordError  = $_SESSION['error_message'] ?? null;
+   $successMessage = $_SESSION['success_message'] ?? null;
+
+
+   unset($_SESSION['error_message'], $_SESSION['success_message']);
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -16,8 +24,8 @@
                 <li><a href="#" onclick="showSection('dati-personali')">Dati Personali</a></li>
                 <li><a href="#" onclick="showSection('videolezioni')">Videolezioni</a></li>
                 <li><a href="#" onclick="showSection('classifiche')">Classifiche</a></li>
-                <li class="home-menu-item"><a href="../Index/index.html" class="home-button">Torna alla Home</a></li>
-                <li class="game-menu-item"><a href="../Game/game.html" class="game-button">Andiamo a Giocare</a></li>
+                <li class="home-menu-item"><a href="../Index/index.php" class="home-button">Torna alla Home</a></li>
+                <li class="game-menu-item"><a href="../Game/game.php" class="game-button">Andiamo a Giocare</a></li>
             </ul>
         </div>
         <!--body statistiche-->
@@ -46,36 +54,60 @@
                 <form id="personalDataForm" class="personal-data-form">
                     <div class="form-group">
                         <label for="nome">Nome:</label>
-                        <input type="text" id="nome" name="nome" required>
+                        <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome']);?>"readonly>
                     </div>
                     <div class="form-group">
                         <label for="cognome">Cognome:</label>
-                        <input type="text" id="cognome" name="cognome" required>
+                        <input type="text" id="cognome" name="cognome" value="<?php echo htmlspecialchars($_SESSION['cognome']);?>"readonly >
                     </div>
                     <div class="form-group">
                         <label for="username">Nome Utente:</label>
-                        <input type="text" id="username" name="username" required>
+                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($_SESSION['username']);?>"readonly>
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']);?>"readonly>
                     </div>
                     <div class="form-group">
                         <label for="data_nascita">Data di Nascita:</label>
-                        <input type="date" id="data_nascita" name="data_nascita" required>
+                        <input type="date" id="data" name="data" value="<?php echo htmlspecialchars($_SESSION['data']);?>"readonly>
                     </div>
                     <div class="form-group password-group">
                         <label for="password">Password:</label>
                         <div class="password-container">
-                            <input type="password" id="password" name="password" disabled>
-                            <button type="button" class="modify-password-btn" onclick="enablePasswordEdit()">Modifica Password</button>
+                            <input type="password" id="password" name="password" value= "********" disabled>
+                            <button type="button" class="modify-password-btn" onclick="togglePopup()">Modifica Password</button>
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <button type="submit" class="save-btn">Salva Modifiche</button>
-                    </div>
                 </form>
+            <!--form modifica della password-->
+                <div id="changePasswordPopup" class="popup hidden">
+                    <div class="popup-content">
+                        <span class="close" onclick="togglePopup()">&times;</span>
+                        <h3>Modifica Password</h3>
+                        <form id="changePasswordForm" action="update_password.php" method="POST">
+                            <div class="form-group">
+                                <label for="currentPassword">Password Attuale:</label>
+                                <input type="password" id="currentPassword" name="currentPassword" required>
+                                <div id="currentPasswordError" class="error-message"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Nuova Password:</label>
+                                <input type="password" id="newPassword" name="newPassword" required>
+                                <div id="newPasswordError" class="error-message"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmNewPassword">Conferma Nuova Password:</label>
+                                <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+                                <div id="confirmNewPasswordError" class="error-message"></div>
+                            </div>
+                            <button type="submit">Salva Modifiche</button>
+                            <button type="button" onclick="togglePopup()">Annulla</button>
+                        </form>
+                    </div>
+                </div>
             </div>
+            <!--Videolezioni-->
 
             <div id="videolezioni" class="content-section">
                 <h2>Videolezioni</h2>
@@ -223,11 +255,29 @@
             new Chart(document.getElementById('pieChart'), pieConfig);
             new Chart(document.getElementById('improvementChart'), improvementConfig);
         }
-        //modifica password nella sezione dati personali
-        function enablePasswordEdit() {
-            const passwordInput = document.getElementById('password');
-            passwordInput.disabled = false;
-            passwordInput.focus();
+        //Pulsante di modifica password
+        function togglePopup() {
+            const popup = document.getElementById('changePasswordPopup');
+            popup.classList.toggle('hidden');
+        }
+        window.onload = function () {
+        showSection('statistiche');
+        new Chart(document.getElementById('progressChart'), progressConfig);
+        new Chart(document.getElementById('pieChart'), pieConfig);
+        new Chart(document.getElementById('improvementChart'), improvementConfig);
+
+        <?php if ($passwordError): ?>
+            showSection('dati-personali');
+            togglePopup();                
+            const passwordError = "<?php echo $passwordError; ?>";
+            if (passwordError === "current") {
+                document.getElementById('currentPasswordError').textContent = "⚠️ Password attuale errata.";
+            } else if (passwordError === "length") {
+                document.getElementById('newPasswordError').textContent = "⚠️ La nuova password deve avere almeno 8 caratteri.";
+            } else if (passwordError === "mismatch") {
+                document.getElementById('confirmNewPasswordError').textContent = "⚠️ Le password non coincidono.";
+            }
+        <?php endif; ?>
         }
 
         // Gestione del form

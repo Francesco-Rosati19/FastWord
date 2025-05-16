@@ -10,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
     if ($dbconn) {
         $email = $_POST['email'];
         $password = $_POST['password'];
-
-        $query = "SELECT username, email, password FROM utenti WHERE email = $1";
+        
+        $query = "SELECT username, email, password, nome, cognome, data FROM utenti WHERE email = $1";
         $result = pg_query_params($dbconn, $query, array($email));
         
         //controlla che l'email inserita si trovi nel database
@@ -22,6 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
             if (password_verify($password, $hashed_password)) {
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
+                $_SESSION['nome'] = $user['nome'];
+                $_SESSION['cognome'] = $user['cognome'];
+                $_SESSION['data'] = $user['data'];
                 header("Location: ../Profilo/profilo.php");
                 exit();
             } else {
