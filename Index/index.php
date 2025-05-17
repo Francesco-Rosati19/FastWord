@@ -25,7 +25,7 @@
             <img src="logo.jpg" alt="Logo" class="logo">
         </div>
         <div class="bottoni">
-            <a href="../Gioco/gioco.html"> GIOCO </a>
+            <a href="../Gioco/gioco.php"> GIOCO </a>
             <a href="../Faq/faq.html"> FAQ </a>
             <a href="../Info/info.html"> CHI SIAMO</a>
             <a href="#" class="login"> LOGIN </a>

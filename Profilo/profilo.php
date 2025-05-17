@@ -370,13 +370,6 @@
             new Chart(document.getElementById('improvementChart'), improvementConfig);
         };
 
-        // Gestione del form
-        document.getElementById('personalDataForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Qui andrà il codice per salvare i dati nel database
-            alert('Dati salvati con successo!');
-        });
-
         function showRanking(month) {
             // Rimuovi la classe active da tutti i pulsanti
             document.querySelectorAll('.month-btn').forEach(btn => {

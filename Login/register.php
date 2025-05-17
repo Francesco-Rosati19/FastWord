@@ -62,6 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
             unset($_SESSION['register_error'], $_SESSION['old_register_data']);
             $_SESSION['username'] = $username;
             $_SESSION['email'] = $email;
+            $_SESSION['nome'] = $nome;
+            $_SESSION['cognome'] = $cognome;
+            $_SESSION['data'] =$data;
             header("Location: ../Profilo/profilo.php");
             exit();
         } else {
