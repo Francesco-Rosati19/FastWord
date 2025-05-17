@@ -73,7 +73,6 @@
    $precisione = (float)$userData['precisione'];
    $punteggioMedio = (float)$userData['punteggio_medio'];
 
-   unset($_SESSION['error_message'], $_SESSION['success_message']);
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -120,6 +119,7 @@
             <!--dati personali-->
             <div id="dati-personali" class="content-section">
                 <h2>Dati Personali</h2>
+                <div id="successMessage" class="success-message hidden">Password cambiata con successo!</div>
                 <form id="personalDataForm" class="personal-data-form">
                     <div class="form-group">
                         <label for="nome">Nome:</label>
@@ -150,31 +150,34 @@
                     </div>
                 </form>
             <!--form modifica della password-->
-                <div id="changePasswordPopup" class="popup hidden">
-                    <div class="popup-content">
-                        <span class="close" onclick="togglePopup()">&times;</span>
-                        <h3>Modifica Password</h3>
-                        <form id="changePasswordForm" action="update_password.php" method="POST">
-                            <div class="form-group">
-                                <label for="currentPassword">Password Attuale:</label>
-                                <input type="password" id="currentPassword" name="currentPassword" required>
-                                <div id="currentPasswordError" class="error-message"></div>
+                <!-- Overlay + Popup -->
+                    <div id="popupOverlay" class="popup-overlay hidden">
+                        <div class="popup">
+                            <div class="popup-content">
+                                <span class="close" onclick="togglePopup()">&times;</span>
+                                <h3>Modifica Password</h3>
+                                <form id="changePasswordForm" action="update_password.php" method="POST">
+                                    <div class="form-group">
+                                        <label for="currentPassword">Password Attuale:</label>
+                                        <input type="password" id="currentPassword" name="currentPassword" required>
+                                        <div id="currentPasswordError" class="error-message"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPassword">Nuova Password:</label>
+                                        <input type="password" id="newPassword" name="newPassword" required>
+                                        <div id="newPasswordError" class="error-message"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmNewPassword">Conferma Nuova Password:</label>
+                                        <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+                                        <div id="confirmNewPasswordError" class="error-message"></div>
+                                    </div>
+                                    <button type="submit" class="modify-password-btn">Salva Modifiche</button>
+                                    <button type="button" class="modify-password-btn" onclick="togglePopup()">Annulla</button>
+                                </form>
                             </div>
-                            <div class="form-group">
-                                <label for="newPassword">Nuova Password:</label>
-                                <input type="password" id="newPassword" name="newPassword" required>
-                                <div id="newPasswordError" class="error-message"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmNewPassword">Conferma Nuova Password:</label>
-                                <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
-                                <div id="confirmNewPasswordError" class="error-message"></div>
-                            </div>
-                            <button type="submit">Salva Modifiche</button>
-                            <button type="button" onclick="togglePopup()">Annulla</button>
-                        </form>
+                        </div>
                     </div>
-                </div>
             </div>
             <!--Videolezioni-->
 
@@ -324,28 +327,48 @@
 
         //Pulsante di modifica password
         function togglePopup() {
-            const popup = document.getElementById('changePasswordPopup');
-            popup.classList.toggle('hidden');
-        }
-        window.onload = function () {
-        showSection('statistiche');
-        new Chart(document.getElementById('progressChart'), progressConfig);
-        new Chart(document.getElementById('pieChart'), pieConfig);
-        new Chart(document.getElementById('improvementChart'), improvementConfig);
+            const overlay = document.getElementById('popupOverlay');
+            overlay.classList.toggle('hidden');
 
-        <?php if ($passwordError): ?>
-            showSection('dati-personali');
-            togglePopup();                
-            const passwordError = "<?php echo $passwordError; ?>";
-            if (passwordError === "current") {
-                document.getElementById('currentPasswordError').textContent = "⚠️ Password attuale errata.";
-            } else if (passwordError === "length") {
-                document.getElementById('newPasswordError').textContent = "⚠️ La nuova password deve avere almeno 8 caratteri.";
-            } else if (passwordError === "mismatch") {
-                document.getElementById('confirmNewPasswordError').textContent = "⚠️ Le password non coincidono.";
-            }
-        <?php endif; ?>
+            document.getElementById('currentPasswordError').textContent = '';
+            document.getElementById('newPasswordError').textContent = '';
+            document.getElementById('confirmNewPasswordError').textContent = '';
         }
+
+        const passwordError = "<?php echo $passwordError ?? ''; ?>";
+        const successMessage = "<?php echo $successMessage ?? ''; ?>"
+        
+        window.onload = function () {
+            <?php if ($passwordError): ?>
+                showSection('dati-personali');
+                togglePopup();
+                if (passwordError === "current") {
+                    document.getElementById('currentPasswordError').textContent = "⚠️ Password attuale errata.";
+                } else if (passwordError === "length") {
+                    document.getElementById('newPasswordError').textContent = "⚠️ La nuova password deve avere almeno 8 caratteri.";
+                } else if (passwordError === "mismatch") {
+                    document.getElementById('confirmNewPasswordError').textContent = "⚠️ Le password non coincidono.";
+                } else {
+                    alert("Errore: " + passwordError);
+                }
+                return;
+            <?php endif; ?>   
+
+            <?php if ($successMessage): ?>
+                showSection('dati-personali');
+                const successBox = document.getElementById('successMessage');
+                successBox.classList.remove('hidden');
+                setTimeout(() => {
+                    successBox.classList.add('hidden');
+                }, 5000); 
+            <?php else: ?>
+                showSection('statistiche');
+            <?php endif; ?>
+
+            new Chart(document.getElementById('progressChart'), progressConfig);
+            new Chart(document.getElementById('pieChart'), pieConfig);
+            new Chart(document.getElementById('improvementChart'), improvementConfig);
+        };
 
         // Gestione del form
         document.getElementById('personalDataForm').addEventListener('submit', function(e) {
@@ -398,3 +421,6 @@
     </script>
 </body>
 </html> 
+<?php
+      unset($_SESSION['error_message'], $_SESSION['success_message']);
+?>

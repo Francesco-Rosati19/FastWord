@@ -48,7 +48,7 @@ if ($dbconn) {
         $updateResult = pg_query_params($dbconn, $updateQuery, array($newPasswordHash, $username));
 
         if ($updateResult) {
-            $_SESSION['success_message'] = 'Password aggiornata con successo!';
+            $_SESSION['success_message'] = 'success';
             header('Location: profilo.php');
             exit;
         } else {

@@ -288,22 +288,65 @@
         .hidden {
             display: none;
         }
-
-        .popup {
-           
+        /* Overlay oscurato dietro al popup */
+        .popup-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5); /* sfondo semi-trasparente nero */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999; /* assicurati che sia sopra tutto */
         }
 
+        /* Popup centrale */
+        .popup {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            max-width: 90%;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .popup .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .popup .close:hover {
+            color: black;
+        }
+
+      
 
         .error-message {
             color: #a00;
             font-size: 0.9em;
-            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 5px;
         }
+        .success-message {
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+
+
+        /*------------------------------------------*/
