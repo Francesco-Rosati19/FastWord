@@ -2,7 +2,7 @@
    session_start();
    $passwordError  = $_SESSION['error_message'] ?? null;
    $successMessage = $_SESSION['success_message'] ?? null;
-   $month = $_SESSION['ranking-month'] ?? null;
+   $month = $_SESSION['ranking_month'] ?? null;
 
    // Verifica se l'utente è autenticato
    if (!isset($_SESSION['username'])) {
@@ -98,7 +98,7 @@
                 <li><a href="#" onclick="showSection('dati-personali')">Dati Personali</a></li>
                 <li><a href="#" onclick="showSection('videolezioni')">Videolezioni</a></li>
                 <li><a href="#" onclick="showSection('classifiche')">Classifiche</a></li>
-                <li class="home-menu-item"><a href="../Index/index.php" class="home-button">Torna alla Home</a></li>
+                <li class="home-menu-item"><a href="../Index/index.php" class="home-button">Logout</a></li>
                 <li class="game-menu-item"><a href="../Game/game.php" class="game-button">Andiamo a Giocare</a></li>
             </ul>
         </div>
@@ -195,7 +195,7 @@
             <!--classifiche-->
             <div id="classifiche" class="content-section">
                 <h2>Classifiche Mensili</h2>
-                <form id="rankingForm" method="POST" action="get_ranking.php" onsubmit="showClassifiche();">
+                <form id="rankingForm" method="POST" action="get_ranking.php" onsubmit="showClassifiche('classifiche');">
                     <div class="months-grid">
                         <?php 
                         $mesi = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
@@ -240,11 +240,7 @@
     </div>
 
     <script>
-        function showClassifiche() {
-            // Mostra la sezione delle classifiche
-            showSection('classifiche');
-        }
-
+        
         function showSection(sectionId) {
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
@@ -387,20 +383,19 @@
             return;
         <?php endif; ?>   
 
-        // Gestisci la sezione predefinita da mostrare
+      
         var defaultSection = "<?php echo isset($_SESSION['ranking_month']) ? 'classifiche' : 'statistiche'; ?>"; // Mostra "Classifiche" se un mese è selezionato
         showSection(defaultSection);
+        
 
         // Inizializzazione dei grafici
         new Chart(document.getElementById('progressChart'), progressConfig);
         new Chart(document.getElementById('pieChart'), pieConfig);
         new Chart(document.getElementById('improvementChart'), improvementConfig);
     };
-
-
     </script>
 </body>
 </html> 
 <?php
-      unset($_SESSION['error_message'], $_SESSION['success_message']);
+      unset($_SESSION['error_message'], $_SESSION['success_message'],$_SESSION['ranking_month'],$_SESSION['ranking_data']);
 ?>
