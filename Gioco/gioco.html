@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gioco di Scrittura Avanzato</title>
+  <link rel="stylesheet" href="stylegioco.css" />
+</head>
+<body>
+
+  <h1>Gioco di Scrittura Avanzato</h1>
+
+  <div id="timer">⏳ Tempo: 60s</div>
+  <div id="gameBox" onclick="inputArea.focus()"></div>
+  <input type="text" id="inputArea" autofocus />
+  <div id="result"></div>
+
+  <script>
+    const phrases = [
+      "Il gatto salta sopra il tavolo.",
+      "La tastiera è veloce e precisa.",
+      "Oggi il cielo è sereno.",
+      "Studiare ogni giorno aiuta a migliorare."
+    ];
+
+    const inputArea = document.getElementById("inputArea");
+    const gameBox = document.getElementById("gameBox");
+    const result = document.getElementById("result");
+    const timerDisplay = document.getElementById("timer");
+
+    let currentPhrase = "";
+    let currentIndex = 0;
+    let timeLeft = 60;
+    let timer;
+    let userInput = [];
+    let time=0;
+
+    function startGame() {
+      currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+      currentIndex = 0;
+      timeLeft = 60;
+      inputArea.value = "";
+      inputArea.disabled = false;
+      result.textContent = "";
+      userInput = [];
+      updateDisplay();
+      inputArea.focus();
+      
+    }
+
+    function updateDisplay() {
+      let html = "";
+
+      for (let i = 0; i < currentPhrase.length; i++) {
+        const expectedChar = currentPhrase[i];
+        const typedChar = userInput[i];
+
+        if (i < currentIndex) {
+          const className = typedChar === expectedChar ? 'correct' : 'incorrect';
+          html += `<span class="${className}">${expectedChar}</span>`;
+        } else if (i === currentIndex) {
+          const isCorrect = typedChar === expectedChar;
+          const cursorClass = isCorrect ? 'cursor correct' : 'cursor incorrect';
+          html += `<span class="${cursorClass}">${expectedChar}</span>`;
+        } else {
+          html += `<span>${expectedChar}</span>`;
+        }
+      }
+
+      gameBox.innerHTML = html;
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `⏳ Tempo: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          inputArea.disabled = true;
+          showResults();
+        }
+      }, 1000);
+    }
+
+    function showResults() {
+      const correctChars = userInput.filter((char, idx) => char === currentPhrase[idx]).length;
+      const accuracy = Math.round((correctChars / currentPhrase.length) * 100);
+      result.innerHTML = `⏱️ Tempo scaduto!<br> Precisione: ${accuracy}%<br> Caratteri corretti: ${correctChars} / ${currentPhrase.length}`;
+    }
+
+    inputArea.addEventListener("keydown", (e) => {
+      e.preventDefault(); // impedisce la scrittura diretta nel campo
+      if(time==0){
+         startTimer();
+         time++;
+      }
+      const expectedChar = currentPhrase[currentIndex];
+
+      if (e.key.length === 1) { // Solo caratteri stampabili
+        if (e.key === expectedChar) {
+          userInput[currentIndex] = e.key;
+          currentIndex++;
+        } else {
+          userInput[currentIndex] = e.key; // Sovrascrive l'errore precedente
+        }
+      }
+
+      updateDisplay();
+
+      if (userInput.join("") === currentPhrase) {
+          clearInterval(timer);
+          result.innerHTML = "🎉 Frase completata correttamente!";
+          inputArea.disabled = true;
+          showResults();
+      }
+    });
+
+    window.onload = startGame;
+  </script>
+</body>
+</html>
