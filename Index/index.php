@@ -9,6 +9,7 @@
 
 
     unset($_SESSION['login_error'], $_SESSION['register_error']);
+    
 ?>
 
 <!DOCTYPE html>

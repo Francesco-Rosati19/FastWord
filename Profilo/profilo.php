@@ -2,6 +2,7 @@
    session_start();
    $passwordError  = $_SESSION['error_message'] ?? null;
    $successMessage = $_SESSION['success_message'] ?? null;
+   $month = $_SESSION['ranking-month'] ?? null;
 
    // Verifica se l'utente è autenticato
    if (!isset($_SESSION['username'])) {
@@ -9,6 +10,11 @@
        exit();
    }
 
+   if (isset($_POST['month'])) {
+        // Salva il mese selezionato nella sessione
+        $_SESSION['ranking_month'] = $_POST['month'];
+    }
+   
    // Connessione al database FastWord
    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
 
@@ -96,7 +102,7 @@
                 <li class="game-menu-item"><a href="../Game/game.php" class="game-button">Andiamo a Giocare</a></li>
             </ul>
         </div>
-        <!--body statistiche-->
+        <!--statistiche-->
         <div class="content">
             <div id="statistiche" class="content-section">
                 <h2>Statistiche</h2>
@@ -189,22 +195,17 @@
             <!--classifiche-->
             <div id="classifiche" class="content-section">
                 <h2>Classifiche Mensili</h2>
-                <div class="months-grid">
-                    <button class="month-btn" onclick="showRanking('gennaio')">Gennaio</button>
-                    <button class="month-btn" onclick="showRanking('febbraio')">Febbraio</button>
-                    <button class="month-btn" onclick="showRanking('marzo')">Marzo</button>
-                    <button class="month-btn" onclick="showRanking('aprile')">Aprile</button>
-                    <button class="month-btn" onclick="showRanking('maggio')">Maggio</button>
-                    <button class="month-btn" onclick="showRanking('giugno')">Giugno</button>
-                    <button class="month-btn" onclick="showRanking('luglio')">Luglio</button>
-                    <button class="month-btn" onclick="showRanking('agosto')">Agosto</button>
-                    <button class="month-btn" onclick="showRanking('settembre')">Settembre</button>
-                    <button class="month-btn" onclick="showRanking('ottobre')">Ottobre</button>
-                    <button class="month-btn" onclick="showRanking('novembre')">Novembre</button>
-                    <button class="month-btn" onclick="showRanking('dicembre')">Dicembre</button>
-                </div>
+                <form id="rankingForm" method="POST" action="get_ranking.php" onsubmit="showClassifiche();">
+                    <div class="months-grid">
+                        <?php 
+                        $mesi = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+                        foreach ($mesi as $mese): ?>
+                            <button type="submit" name="month" value="<?= $mese ?>" class="month-btn"><?= ucfirst($mese) ?></button>
+                        <?php endforeach; ?>
+                    </div>
+                </form>
                 <div id="ranking-container" class="ranking-container">
-                    <h3 id="ranking-title">Seleziona un mese per visualizzare la classifica</h3>
+                    <h3 id="ranking-title">Classifica - <?= $_SESSION['ranking_month'] ?? "Seleziona un mese" ?></h3>
                     <div class="ranking-table-container">
                         <table id="ranking-table" class="ranking-table">
                             <thead>
@@ -215,8 +216,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- I dati verranno inseriti dinamicamente -->
-                            </tbody>
+                                <?php if (!empty($_SESSION['ranking_data'])): ?>
+                                    <?php foreach ($_SESSION['ranking_data'] as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['position']) ?></td>
+                                            <td><?= htmlspecialchars($row['username']) ?></td>
+                                            <td><?= htmlspecialchars($row['score']) ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="3">
+                                            <?= isset($_SESSION['ranking_error']) ? htmlspecialchars($_SESSION['ranking_error']) : "Seleziona un mese per visualizzare la classifica." ?>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                             </tbody>
                         </table>
                     </div>
                 </div>
@@ -225,6 +240,11 @@
     </div>
 
     <script>
+        function showClassifiche() {
+            // Mostra la sezione delle classifiche
+            showSection('classifiche');
+        }
+
         function showSection(sectionId) {
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
@@ -336,81 +356,48 @@
         }
 
         const passwordError = "<?php echo $passwordError ?? ''; ?>";
-        const successMessage = "<?php echo $successMessage ?? ''; ?>"
+        const successMessage = "<?php echo $successMessage ?? ''; ?>";
+        const month = "<?php echo $month ?? '' ; ?>";
         
-        window.onload = function () {
-            <?php if ($passwordError): ?>
-                showSection('dati-personali');
-                togglePopup();
-                if (passwordError === "current") {
-                    document.getElementById('currentPasswordError').textContent = "⚠️ Password attuale errata.";
-                } else if (passwordError === "length") {
-                    document.getElementById('newPasswordError').textContent = "⚠️ La nuova password deve avere almeno 8 caratteri.";
-                } else if (passwordError === "mismatch") {
-                    document.getElementById('confirmNewPasswordError').textContent = "⚠️ Le password non coincidono.";
-                } else {
-                    alert("Errore: " + passwordError);
-                }
-                return;
-            <?php endif; ?>   
+    window.onload = function () {
+        // Se c'è un errore nella password, mostriamo la sezione 'Dati Personali' con il popup
+        <?php if ($passwordError): ?>
+            showSection('dati-personali');
+            togglePopup();
+            if (passwordError === "current") {
+                document.getElementById('currentPasswordError').textContent = "⚠️ Password attuale errata.";
+            } else if (passwordError === "length") {
+                document.getElementById('newPasswordError').textContent = "⚠️ La nuova password deve avere almeno 8 caratteri.";
+            } else if (passwordError === "mismatch") {
+                document.getElementById('confirmNewPasswordError').textContent = "⚠️ Le password non coincidono.";
+            } else {
+                alert("Errore: " + passwordError);
+            }
+            return;
+        <?php endif; ?>   
 
-            <?php if ($successMessage): ?>
-                showSection('dati-personali');
-                const successBox = document.getElementById('successMessage');
-                successBox.classList.remove('hidden');
-                setTimeout(() => {
-                    successBox.classList.add('hidden');
-                }, 5000); 
-            <?php else: ?>
-                showSection('statistiche');
-            <?php endif; ?>
+        // Se c'è un messaggio di successo, mostriamo un messaggio nella sezione 'Dati Personali'
+        <?php if ($successMessage): ?>
+            showSection('dati-personali');
+            const successBox = document.getElementById('successMessage');
+            successBox.classList.remove('hidden');
+            setTimeout(() => {
+                successBox.classList.add('hidden');
+            }, 5000); 
+            return;
+        <?php endif; ?>   
 
-            new Chart(document.getElementById('progressChart'), progressConfig);
-            new Chart(document.getElementById('pieChart'), pieConfig);
-            new Chart(document.getElementById('improvementChart'), improvementConfig);
-        };
+        // Gestisci la sezione predefinita da mostrare
+        var defaultSection = "<?php echo isset($_SESSION['ranking_month']) ? 'classifiche' : 'statistiche'; ?>"; // Mostra "Classifiche" se un mese è selezionato
+        showSection(defaultSection);
 
-        function showRanking(month) {
-            // Rimuovi la classe active da tutti i pulsanti
-            document.querySelectorAll('.month-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Aggiungi la classe active al pulsante cliccato
-            event.target.classList.add('active');
-            
-            // Aggiorna il titolo
-            document.getElementById('ranking-title').textContent = `Classifica - ${month.charAt(0).toUpperCase() + month.slice(1)}`;
-            
-            // Chiamata AJAX per recuperare i dati dal database
-            fetch(`get_ranking.php?month=${month}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert('Errore nel recupero della classifica: ' + data.error);
-                    } else {
-                        updateRankingTable(data);
-                    }
-                })
-                .catch(error => {
-                    alert('Errore nella comunicazione con il server: ' + error);
-                });
-        }
+        // Inizializzazione dei grafici
+        new Chart(document.getElementById('progressChart'), progressConfig);
+        new Chart(document.getElementById('pieChart'), pieConfig);
+        new Chart(document.getElementById('improvementChart'), improvementConfig);
+    };
 
-        function updateRankingTable(data) {
-            const tbody = document.querySelector('#ranking-table tbody');
-            tbody.innerHTML = '';
-            
-            data.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.position}</td>
-                    <td>${user.username}</td>
-                    <td>${user.score}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
+
     </script>
 </body>
 </html> 
