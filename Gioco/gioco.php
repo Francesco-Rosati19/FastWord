@@ -15,6 +15,7 @@
     <div class="game-header">
       <div class="dropdown">
         <select id="languageSelect">
+          <option value="seleziona lingua" selected>Seleziona lingua</option>
           <option value="italiano">Italiano</option>
           <option value="inglese">Inglese</option>
           <option value="spagnolo">Spagnolo</option>
@@ -159,14 +160,56 @@ document.getElementById("textSelect").addEventListener("change", function () {
   // Reset del contatore interno per impedire l'avvio automatico del timer
   time = 0;
 });
+//liustener menu a tendina lingua
+document.getElementById("languageSelect").addEventListener("change", function () {
+  const selectedLang = this.value;
+  const textSelect = document.getElementById("textSelect");
 
+  // Reset e disabilita il menu testi momentaneamente
+  textSelect.innerHTML = '<option value="">Caricamento...</option>';
+  textSelect.disabled = true;
 
+  fetch(`texts/getTextFiles.php?lingua=${selectedLang}`)
+    .then(response => {
+      if (!response.ok) throw new Error("Errore nel recupero dei file");
+      return response.json();
+    })
+    .then(files => {
+      textSelect.innerHTML = '<option value="">Seleziona un testo</option>';
+      files.forEach(file => {
+        const option = document.createElement("option");
+        option.value = `${selectedLang}/${file}`;
+        option.textContent = file.replace(".txt", "");
+        textSelect.appendChild(option);
+      });
+      textSelect.disabled = false;
+    })
+    .catch(err => {
+      textSelect.innerHTML = '<option value="">Errore nel caricamento</option>';
+      console.error("Errore:", err);
+    });
+});
 
+//Funzione per mostrare i risultati a schermo
     function showResults() {
-      const correctChars = userInput.filter((char, idx) => char === currentPhrase[idx]).length;
-      const accuracy = Math.round((correctChars / currentPhrase.length) * 100);
-      result.innerHTML = `⏱️ Tempo scaduto!<br> Precisione: ${accuracy}%<br> Caratteri corretti: ${correctChars} / ${currentPhrase.length} <br> ❌ Errori: ${errorCount}`;
-    }
+  const correctChars = userInput.filter((char, idx) => char === currentPhrase[idx]).length;
+  const totalTyped = correctChars + errorCount;
+  const accuracy = totalTyped === 0 ? 0 : Math.round((correctChars / totalTyped) * 100);
+
+  const totalTime = parseInt(document.getElementById("timerSelect").value);
+  const timeUsed = totalTime - timeLeft;
+  const minutes = timeUsed / 60;
+  const wpm = minutes > 0 ? Math.round((correctChars / 5) / minutes) : 0;
+
+  result.innerHTML = `
+    ⏱️ Tempo scaduto!<br>
+    ✅ Precisione: ${accuracy}%<br>
+    ✍️ Caratteri corretti: ${correctChars} / ${currentPhrase.length}<br>
+    ❌ Errori: ${errorCount}<br>
+    🚀 Velocità: ${wpm} parole/minuto
+  `;
+}
+
 
     inputArea.addEventListener("keydown", (e) => {
       e.preventDefault(); // impedisce la scrittura diretta nel campo
@@ -196,7 +239,7 @@ document.getElementById("textSelect").addEventListener("change", function () {
       }
     });
 
-    window.onload = startGame;
+    window.onload = startGame();
   </script>
 </body>
 </html>
