@@ -96,7 +96,7 @@
             <ul>
                 <li><a href="#" onclick="showSection('statistiche')">Statistiche</a></li>
                 <li><a href="#" onclick="showSection('dati-personali')">Dati Personali</a></li>
-                <li><a href="#" onclick="showSection('videolezioni')">Videolezioni</a></li>
+                <li><a href="#" onclick="showSection('apprendimento')">Apprendimento</a></li>
                 <li><a href="#" onclick="showSection('classifiche')">Classifiche</a></li>
                 <li class="home-menu-item"><a href="../Index/index.php" class="home-button">Logout</a></li>
                 <li class="game-menu-item"><a href="../Gioco/gioco.php" class="game-button">Andiamo a Giocare</a></li>
@@ -185,11 +185,32 @@
                         </div>
                     </div>
             </div>
-            <!--Videolezioni-->
+            <!--apprendimento-->
 
-            <div id="videolezioni" class="content-section">
-                <h2>Videolezioni</h2>
-                <p>Qui troverai l'elenco delle videolezioni disponibili.</p>
+            <div id="apprendimento" class="content-section">
+                <h2>Consigli utili</h2>
+                <h3 class="sottotitoli">Posizionamento delle dita</h3>
+                <img src="dita.png" class="immagine">
+                <h3 class="sottotitoli">Link utili</h3>
+                <a href="https://www.youtube.com/watch?v=_IxrouLKUaA" class="link-utile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" class="youtube-icon"> Scrivere Velocemente in 7 giorni
+                </a>
+                <a href="https://www.youtube.com/watch?v=beiyR_m1dyc" class="link-utile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" class="youtube-icon"> Raddoppiare la velocità di lettura
+                </a>
+                <a href="https://www.youtube.com/watch?v=77qXGHOoK18" class="link-utile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" class="youtube-icon"> 5 aiuti per migliorare
+                </a>
+                <h3 class="sottotitoli">I nostri testi per esercitarsi</h3>
+
+
+
+                <h3 class="sottotitoli">Altri fattori che potrebbero influire la velocità di scrittura</h3>
+                <p> Noi siamo tutti amici</p>
+                <p>Noi siamo tutti amici</p>
+                <p>Noi siamo tutti amici</p>
+                <p>Noi siamo tutti amici</p>
+
             </div>
 
             <!--classifiche-->
