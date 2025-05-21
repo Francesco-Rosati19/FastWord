@@ -43,7 +43,7 @@ if (!array_key_exists($month, $monthFieldMap)) {
 $field = $monthFieldMap[$month];
 
 // Esegui la query
-$query = "SELECT username, $field as punteggio_medio FROM utentedati ORDER BY $field DESC LIMIT 10";
+$query = "SELECT username, $field as punteggio_medio FROM utentedati ORDER BY $field DESC LIMIT 100";
 $result = pg_query($dbconn, $query);
 
 if (!$result) {
