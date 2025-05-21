@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Esempio di prova</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styleProva.css" />
+</head>
+<body>
+    <h1 class="page-title">FASTWORD</h1>
+    <a href="../Index/index.php" class="nav-btn" style="margin-left: -800px;">HOME</a>  
+    <div id="timer">⏳ Tempo: 60s</div>
+    <div id="gameBox" onclick="inputArea.focus()"></div>
+    <input type="text" id="inputArea" autofocus />
+    <div id="result"></div>
+    <button class="nav-btn" onclick="startGame()">Reset</button>
+  </div>
+
+  <script>
+    const inputArea = document.getElementById("inputArea");
+    const gameBox = document.getElementById("gameBox");
+    const result = document.getElementById("result");
+    const timerDisplay = document.getElementById("timer");
+
+    let currentPhrase = "Questo è un esempio di prova. Se fai il login c'è la possibilità di scegliere la lingua, il tempo e il testo. Ti verranno comunque mostrati i risultati ma non verranno salvati da nessuna parte.";
+    let currentIndex = 0;
+    let timer;
+    let userInput = [];
+    let errorCount=0;
+    let timeLeft = 60;
+    let time=0;
+
+  function startGame() {
+    
+    timeLeft = 60; 
+    currentIndex = 0;
+    timerDisplay.textContent = `⏳ Tempo: ${timeLeft}s`;
+    inputArea.value = "";
+    inputArea.disabled = false;
+    result.textContent = "";
+    userInput = [];
+    errorCount = 0; //reset numero errori
+    
+    updateDisplay();
+    inputArea.focus();
+    }
+
+    function updateDisplay() {
+      let html = "";
+
+      for (let i = 0; i < currentPhrase.length; i++) {
+        const expectedChar = currentPhrase[i];
+        const typedChar = userInput[i];
+
+        if (i < currentIndex) {
+          const className = typedChar === expectedChar ? 'correct' : 'incorrect';
+          html += `<span class="${className}">${expectedChar}</span>`;
+        } else if (i === currentIndex) {
+          const isCorrect = typedChar === expectedChar;
+          const cursorClass = isCorrect ? 'cursor correct' : 'cursor incorrect';
+          html += `<span class="${cursorClass}">${expectedChar}</span>`;
+        } else {
+          html += `<span>${expectedChar}</span>`;
+        }
+      }
+
+      gameBox.innerHTML = html;
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `⏳ Tempo: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          inputArea.disabled = true;
+          showResults();
+        }
+      }, 1000);
+    }
+    
+    function showResults() {
+      const correctChars = userInput.filter((char, idx) => char === currentPhrase[idx]).length;
+      const accuracy = Math.round((correctChars / currentPhrase.length) * 100);
+      result.innerHTML = `⏱️ Tempo scaduto!<br> Precisione: ${accuracy}%<br> Caratteri corretti: ${correctChars} / ${currentPhrase.length} <br> ❌ Errori: ${errorCount}`;
+    }
+
+    inputArea.addEventListener("keydown", (e) => {
+      e.preventDefault(); // impedisce la scrittura diretta nel campo
+      if(time==0){
+         startTimer();
+         time++;
+      }
+      const expectedChar = currentPhrase[currentIndex];
+
+      if (e.key.length === 1) { // Solo caratteri stampabili
+        if (e.key === expectedChar) {
+          userInput[currentIndex] = e.key;
+          currentIndex++;
+        } else {
+          userInput[currentIndex] = e.key; // Sovrascrive l'errore precedente
+          errorCount++;
+        }
+      }
+
+      updateDisplay();
+
+      if (userInput.join("") === currentPhrase) {
+          clearInterval(timer);
+          result.innerHTML = "🎉 Frase completata correttamente!";
+          inputArea.disabled = true;
+          showResults();
+      }
+    });
+
+    window.onload = startGame;
+  </script>
+</body>
+</html>
