@@ -34,7 +34,7 @@
     </div>
 
     <div class="prova">
-        <a href="../prova">SU! FACCIAMO UNA PROVA</a> 
+        <a href="../Prova/prova.html">SU! FACCIAMO UNA PROVA</a> 
     </div>
 
     <div class="box-container">
