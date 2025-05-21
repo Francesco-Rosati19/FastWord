@@ -99,7 +99,7 @@
                 <li><a href="#" onclick="showSection('videolezioni')">Videolezioni</a></li>
                 <li><a href="#" onclick="showSection('classifiche')">Classifiche</a></li>
                 <li class="home-menu-item"><a href="../Index/index.php" class="home-button">Logout</a></li>
-                <li class="game-menu-item"><a href="../Game/game.php" class="game-button">Andiamo a Giocare</a></li>
+                <li class="game-menu-item"><a href="../Gioco/gioco.php" class="game-button">Andiamo a Giocare</a></li>
             </ul>
         </div>
         <!--statistiche-->
