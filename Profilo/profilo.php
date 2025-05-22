@@ -96,7 +96,7 @@
             <ul>
                 <li><a href="#" onclick="showSection('statistiche')">Statistiche</a></li>
                 <li><a href="#" onclick="showSection('dati-personali')">Dati Personali</a></li>
-                <li><a href="#" onclick="showSection('apprendimento')">Apprendimento</a></li>
+                <li><a href="#" onclick="showSection('apprendimento')">Consigli utili</a></li>
                 <li><a href="#" onclick="showSection('classifiche')">Classifiche</a></li>
                 <li class="home-menu-item"><a href="../Index/index.php" class="home-button">Logout</a></li>
                 <li class="game-menu-item"><a href="../Gioco/gioco.php" class="game-button">Andiamo a Giocare</a></li>
@@ -189,7 +189,7 @@
 
             <div id="apprendimento" class="content-section">
                 <h2>Consigli utili</h2>
-                <h3 class="sottotitoli">Posizionamento delle dita</h3>
+                <h3 class="sottotitoli">Posizionamento corretto delle dita</h3>
                 <img src="dita.png" class="immagine">
                 <h3 class="sottotitoli">Link utili</h3>
                 <a href="https://www.youtube.com/watch?v=_IxrouLKUaA" class="link-utile">
@@ -201,15 +201,13 @@
                 <a href="https://www.youtube.com/watch?v=77qXGHOoK18" class="link-utile">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" class="youtube-icon"> 5 aiuti per migliorare
                 </a>
-                <h3 class="sottotitoli">I nostri testi per esercitarsi</h3>
-
-
-
                 <h3 class="sottotitoli">Altri fattori che potrebbero influire la velocità di scrittura</h3>
-                <p> Noi siamo tutti amici</p>
-                <p>Noi siamo tutti amici</p>
-                <p>Noi siamo tutti amici</p>
-                <p>Noi siamo tutti amici</p>
+                <p style="margin-top: 50px; color:red ;font-size: 2vw"> Postura della schiena</p>
+                <img src="postura.png" class="immagine">
+                <p style="margin-top: 50px; color:red ;font-size: 2vw"> Utilizzo tastiera ergonomica</p>
+                <img src="tastiera.jpg" class="immagine">
+                <p style="margin-top: 50px; color:red ;font-size: 2vw"> Giusta illuminazione della stanza</p>
+                <img src="illuminazione.jpg" class="immagine">
 
             </div>
 
