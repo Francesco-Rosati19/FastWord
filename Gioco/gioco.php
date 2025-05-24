@@ -26,6 +26,7 @@
           <option value="30">30 secondi</option>
           <option value="60" selected>60 secondi</option>
           <option value="90">90 secondi</option>
+          <option value="1800">1800 secondi</option>
         </select>
       </div>
       <div class="dropdown">
@@ -62,60 +63,97 @@
     let timeLeft = 60;
     let timer;
     let userInput = [];
-    let errorCount=0;
-    let time=0;
-    
-  function startGame() {
-  currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-  currentIndex = 0;
-  
-  const selectedTime = document.getElementById("timerSelect").value;
-  timeLeft = parseInt(selectedTime);
-  timerDisplay.textContent = `⏳ Tempo: ${timeLeft}s`;
+    let errorCount = 0;
+    let time = 0;
 
-  inputArea.value = "";
-  inputArea.disabled = false;
-  result.textContent = "";
-  userInput = [];
-  errorCount = 0; //reset numero errori
-  time = 0; // Reset per permettere un nuovo avvio del timer
+    // Funzione per resettare il timer e il display
+    function resetTimerDisplay() {
+      timeLeft = parseInt(document.getElementById("timerSelect").value);
+      timerDisplay.textContent = `⏳ Tempo: ${timeLeft}s`;
+      clearInterval(timer); // Ferma il timer se era in esecuzione
+      time = 0; // Reset per permettere un nuovo avvio del timer
+    }
 
-  updateDisplay();
-  inputArea.focus();
-}
-
-//listener per cambiare e selezionare testo
-document.getElementById("textSelect").addEventListener("change", function () {
-  const fileName = this.value;
-  if (!fileName) return;
-
-  fetch(`texts/${fileName}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("File non trovato");
-      }
-      return response.text();
-    })
-    .then(text => {
-      currentPhrase = text.trim();
+    // Funzione per resettare l'input e le statistiche
+    function resetInputAndStats() {
       currentIndex = 0;
       userInput = [];
-      errorCount = 0;
+      errorCount = 0; //resetta il numero di errori
       result.textContent = "";
       inputArea.value = "";
-      time = 0;
-      updateDisplay();
       inputArea.disabled = false;
+      updateDisplay();
       inputArea.focus();
-      timerDisplay.textContent = `⏳ Tempo: ${timeLeft}s`;
-    })
-    .catch(err => {
-      result.innerHTML = `⚠️ Errore nel caricamento del file: ${err.message}`;
+    }
+
+    // Funzione per caricare una frase casuale
+    function loadRandomPhrase() {
+      currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+      resetInputAndStats();
+    }
+
+    function startGame() {
+      loadRandomPhrase();
+      resetTimerDisplay();
+    }
+
+    document.getElementById("textSelect").addEventListener("change", function () {
+      resetTimerDisplay();
+      const fileName = this.value;
+      if (!fileName) return;
+
+      fetch(`texts/${fileName}`)
+        .then(response => {
+          if (!response.ok) throw new Error("File non trovato");
+          return response.text();
+        })
+        .then(text => {
+          currentPhrase = text.trim();
+          resetInputAndStats();
+        })
+        .catch(err => {
+          result.innerHTML = `⚠️ Errore nel caricamento del file: ${err.message}`;
+        });
     });
-});
 
+    //listener per menù timer
+    document.getElementById("timerSelect").addEventListener("change", () => {
+      resetTimerDisplay();
+      loadRandomPhrase();
+    });
 
+    //listener per menù lingua
+    document.getElementById("languageSelect").addEventListener("change", function () {
+      resetTimerDisplay();
+      inputArea.disabled = true;
+      const selectedLang = this.value;
+      const textSelect = document.getElementById("textSelect");
 
+      textSelect.innerHTML = '<option value="">Caricamento...</option>';
+      textSelect.disabled = true;
+
+      fetch(`texts/getTextFiles.php?lingua=${selectedLang}`)
+        .then(response => {
+          if (!response.ok) throw new Error("Errore nel recupero dei file");
+          return response.json();
+        })
+        .then(files => {
+          textSelect.innerHTML = '<option value="">Seleziona un testo</option>';
+          files.forEach(file => {
+            const option = document.createElement("option");
+            option.value = `${selectedLang}/${file}`;
+            option.textContent = file.replace(".txt", "");
+            textSelect.appendChild(option);
+          });
+          textSelect.disabled = false;
+        })
+        .catch(err => {
+          textSelect.innerHTML = '<option value="">Errore nel caricamento</option>';
+          console.error("Errore:", err);
+        });
+    });
+    
+    // Funzione per aggiornare la visualizzazione del testo
     function updateDisplay() {
       let html = "";
 
@@ -129,15 +167,26 @@ document.getElementById("textSelect").addEventListener("change", function () {
         } else if (i === currentIndex) {
           const isCorrect = typedChar === expectedChar;
           const cursorClass = isCorrect ? 'cursor correct' : 'cursor incorrect';
-          html += `<span class="${cursorClass}">${expectedChar}</span>`;
+          html += `<span id="activeChar" class="${cursorClass}">${expectedChar}</span>`;
         } else {
           html += `<span>${expectedChar}</span>`;
         }
       }
 
       gameBox.innerHTML = html;
+
+      //scorrimento verso il cursore
+      const activeChar = document.getElementById("activeChar");
+      if (activeChar) {
+        activeChar.scrollIntoView({ 
+            behavior: "auto",
+            block: "nearest",
+            inline: "nearest" 
+        });
+      }
     }
 
+    // Funzione per avviare il timer
     function startTimer() {
       clearInterval(timer);
       timer = setInterval(() => {
@@ -151,80 +200,42 @@ document.getElementById("textSelect").addEventListener("change", function () {
         }
       }, 1000);
     }
-    //listener menu a tendina timer
-    document.getElementById("timerSelect").addEventListener("change", () => {
-  const selectedTime = parseInt(document.getElementById("timerSelect").value);
-  timeLeft = selectedTime;
-  timerDisplay.textContent = `⏳ Tempo: ${timeLeft}s`;
 
-  // Reset del contatore interno per impedire l'avvio automatico del timer
-  time = 0;
-});
-//liustener menu a tendina lingua
-document.getElementById("languageSelect").addEventListener("change", function () {
-  const selectedLang = this.value;
-  const textSelect = document.getElementById("textSelect");
-
-  // Reset e disabilita il menu testi momentaneamente
-  textSelect.innerHTML = '<option value="">Caricamento...</option>';
-  textSelect.disabled = true;
-
-  fetch(`texts/getTextFiles.php?lingua=${selectedLang}`)
-    .then(response => {
-      if (!response.ok) throw new Error("Errore nel recupero dei file");
-      return response.json();
-    })
-    .then(files => {
-      textSelect.innerHTML = '<option value="">Seleziona un testo</option>';
-      files.forEach(file => {
-        const option = document.createElement("option");
-        option.value = `${selectedLang}/${file}`;
-        option.textContent = file.replace(".txt", "");
-        textSelect.appendChild(option);
-      });
-      textSelect.disabled = false;
-    })
-    .catch(err => {
-      textSelect.innerHTML = '<option value="">Errore nel caricamento</option>';
-      console.error("Errore:", err);
-    });
-});
-
-//Funzione per mostrare i risultati a schermo
+    // Funzione per mostrare i risultati finali
     function showResults() {
-  const correctChars = userInput.filter((char, idx) => char === currentPhrase[idx]).length;
-  const totalTyped = correctChars + errorCount;
-  const accuracy = totalTyped === 0 ? 0 : Math.round((correctChars / totalTyped) * 100);
+      const correctChars = userInput.filter((char, idx) => char === currentPhrase[idx]).length;
+      const totalTyped = correctChars + errorCount;
+      const accuracy = totalTyped === 0 ? 0 : Math.round((correctChars / totalTyped) * 100);
 
-  const totalTime = parseInt(document.getElementById("timerSelect").value);
-  const timeUsed = totalTime - timeLeft;
-  const minutes = timeUsed / 60;
-  const wpm = minutes > 0 ? Math.round((correctChars / 5) / minutes) : 0;
+      const totalTime = parseInt(document.getElementById("timerSelect").value);
+      const timeUsed = totalTime - timeLeft;
+      const minutes = timeUsed / 60;
+      const wpm = minutes > 0 ? Math.round((correctChars / 5) / minutes) : 0;
 
-  result.innerHTML = `
-    ⏱️ Tempo scaduto!<br>
-    ✅ Precisione: ${accuracy}%<br>
-    ✍️ Caratteri corretti: ${correctChars} / ${currentPhrase.length}<br>
-    ❌ Errori: ${errorCount}<br>
-    🚀 Velocità: ${wpm} parole/minuto
-  `;
-}
+      result.innerHTML = `
+        ⏱️ Tempo scaduto!<br>
+        ✅ Precisione: ${accuracy}%<br>
+        ✍️ Caratteri corretti: ${correctChars} / ${currentPhrase.length}<br>
+        ❌ Errori: ${errorCount}<br>
+        🚀 Velocità: ${wpm} parole/minuto
+      `;
+    }
 
-
+    // Listener per l'input dell'utente
     inputArea.addEventListener("keydown", (e) => {
-      e.preventDefault(); // impedisce la scrittura diretta nel campo
-      if(time==0){
-         startTimer();
-         time++;
+      e.preventDefault(); // impedosce la scrittura diretta nel campo
+      if (time === 0) {
+        startTimer();
+        time++;
       }
-      const expectedChar = currentPhrase[currentIndex];
 
-      if (e.key.length === 1) { // Solo caratteri stampabili
+      const expectedChar = currentPhrase[currentIndex];
+      if (e.key.length === 1) {  
         if (e.key === expectedChar) {
           userInput[currentIndex] = e.key;
           currentIndex++;
         } else {
-          userInput[currentIndex] = e.key; // Sovrascrive l'errore precedente
+          userInput[currentIndex] = e.key; //sovrascrive l'errore precedente
           errorCount++;
         }
       }
@@ -232,14 +243,14 @@ document.getElementById("languageSelect").addEventListener("change", function ()
       updateDisplay();
 
       if (userInput.join("") === currentPhrase) {
-          clearInterval(timer);
-          result.innerHTML = "🎉 Frase completata correttamente!";
-          inputArea.disabled = true;
-          showResults();
+        clearInterval(timer);
+        result.innerHTML = "🎉 Frase completata correttamente!";
+        inputArea.disabled = true;
+        showResults();
       }
     });
 
-    window.onload = startGame();
+    window.onload = startGame;
   </script>
 </body>
 </html>
