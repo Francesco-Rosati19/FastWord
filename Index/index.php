@@ -26,7 +26,6 @@
             <img src="logo.jpg" alt="Logo" class="logo">
         </div>
         <div class="bottoni">
-            <a href="../Gioco/gioco.php"> GIOCO </a>
             <a href="../Faq/faq.html"> FAQ </a>
             <a href="../Info/info.html"> CHI SIAMO</a>
             <a href="#" class="login"> LOGIN </a>
@@ -50,7 +49,11 @@
             si aggira intorno ai 2000 e il 90% delle persone sono 
             soddisfatte di aver imparato e giocato con noi
         </div>
-        <div class="box" id="box3"> BOX 3</div>
+        <div class="box" id="box3"> 
+            Arrivando primo nelle classifiche mensili c'è la possibilità di portarsi a casa un piccolo premio.
+            Quindi impegnati e fai del tuo meglio per riuscire ad aggiudicarti il premio.
+        </div>
+            
     </div>
 
     <!--CONTAINER POPUP-->
@@ -140,12 +143,12 @@
            let valid = true;
 
            if (password.length < 8) {
-              document.getElementById('passwordError').textContent = "La password deve contenere almeno 8 caratteri.";
+              document.getElementById('passwordError').textContent = "⚠️La password deve contenere almeno 8 caratteri.";
               valid = false;
            }
 
            if (password !== confirm) {
-               document.getElementById('confirmError').textContent = "Le password non coincidono.";
+               document.getElementById('confirmError').textContent = "⚠️Le password non coincidono.";
                valid = false;
             }
 
@@ -164,7 +167,12 @@
                 icon.textContent = "👁️";
             }
         }
-        
+        // Rimuove il messaggio di errore email quando l'utente modifica il campo email nel form di registrazione
+        document.querySelector("#registerTab input[name='email']").addEventListener("input", function () {
+                document.getElementById('registerEmailError').textContent = "";
+        });
+
+
         const loginError = "<?= $loginError ?>";
         const registerError = "<?= $registerError ?>";
 
