@@ -102,20 +102,25 @@
             
         </script>
         <div class="ask-box">
-        <textarea id="userQuestion" placeholder="Scrivi qui la tua domanda..." rows="4"></textarea>
-        <button id="sendBtn">Invia</button>
+            <textarea id="userQuestion" placeholder="Scrivi qui la tua domanda..." rows="4"></textarea>
+            <button id="sendBtn">Invia</button>
         </div>
-        <script>
-        document.getElementById('sendBtn').addEventListener('click', () => {
-        const question = document.getElementById('userQuestion').value.trim();
-        if(question) {
-        alert('Domanda inviata: ' + question);
-        document.getElementById('userQuestion').value = '';
-        } 
-        else {
-        alert('Per favore scrivi una domanda prima di inviare.');
-       }});
-        </script>
+        <div id="message" style="text-align: center; font-size: 16px; margin-top: 10px;"></div>
 
+        <script>
+            document.getElementById('sendBtn').addEventListener('click', () => {
+                const question = document.getElementById('userQuestion').value.trim();
+                const message = document.getElementById('message');
+                
+                if (question) {
+                    message.textContent = "✅ Domanda inviata con successo.";
+                    message.style.color = "green";
+                    document.getElementById('userQuestion').value = '';
+                } else {
+                    message.textContent = "⚠️ Devi prima scrivere una domanda.";
+                    message.style.color = "red";
+                }
+            });
+        </script>
     </body>
 </html>

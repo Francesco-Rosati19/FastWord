@@ -77,16 +77,20 @@ body {
     height: 900px;
     margin-top: 30vh;
 }
-.box{
-    position:absolute;
-    width: 350px;
-    padding: 50px;
+.box {
+    position: absolute;
+    width: 35vw; /* Responsive width */
+    min-width: 250px;
+    max-width: 400px;
+    padding: 3vw;
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    font-size: 25px;
+    font-size: 1.5vw;
     font-weight: bold;
+    box-sizing: border-box;
 }
+
 #box1{
     top:30px;
     left: 30px;
@@ -99,6 +103,9 @@ body {
     top:700px;
     left:30px;
 }
+
+
+
 /*------------------------------------------------------------------------*/
 
 /*POPUP DI REGISTRAZIONE E LOGIN*/
