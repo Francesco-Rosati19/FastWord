@@ -1,18 +1,12 @@
-
 body {
     font-family: Arial, sans-serif;
-}
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 40px;
-}
-
-.header img {
-    width: 100px; 
-    height: auto;
-    margin-right: 30px; 
+    background-image: url("sfondofaqq.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    margin:0;
+    padding: 0;
+    height: 100vh;
 }
 
 h1{
@@ -21,7 +15,7 @@ h1{
 
 }
 .content {
-    margin-top: 50px; 
+    margin-top: 200px; 
 }
 table {
     margin: 0 auto;
@@ -33,13 +27,16 @@ th, td {
     padding: 30px;
     text-align: left;
     border-radius: 10px;
-    border-bottom: 1px solid white;
 }
 
 th {
     background-color:rgb(54,173,133);
     color:white;
     font-size: 20px;
+}
+
+tr{
+    background-color: rgba(255, 255, 255, 0.899);
 }
 
 tr:hover {
@@ -60,6 +57,9 @@ tr:hover {
 }
 
 .altoadestra a {
+    position: absolute;
+    top: 40px; 
+    left: 20px;
     text-decoration: none;
     padding: 10px 15px;
     background-color: rgb(54,173,133);
@@ -71,3 +71,47 @@ tr:hover {
 .altoadestra a :hover {
     background-color: #0056b3;
 }
+.ask-box {
+    margin-bottom: 40px;
+    width: 80%;
+    margin: 50px auto 100px auto; /* spazio sopra e sotto */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(54,173,133,0.3);
+}
+
+.ask-box textarea {
+    flex: 1; /* prende tutto lo spazio possibile */
+    resize: none;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    padding: 10px 15px;
+    border: 1px solid rgb(54,173,133);
+    border-radius: 8px;
+    outline: none;
+    color: #333;
+}
+
+.ask-box textarea:focus {
+    border-color: rgb(30,120,90);
+}
+
+.ask-box button {
+    padding: 10px 25px;
+    background-color: rgb(54,173,133);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.ask-box button:hover {
+    background-color: blue;
+}
+

@@ -8,13 +8,6 @@
        
     </head>
     <body>
-
-       
-        <div class="header">
-            <h1>FAQ</h1>
-            <img src="faq.jpeg" alt="Icona Titolo">
-            
-        </div>
         
         <div class="altoadestra">
             <a href="../Index/index.php">HOME</a>
@@ -29,37 +22,56 @@
                 <tbody>
                     <tr tabindex="0" class="question">
                         <td>
-                            domanda
-                            <div class="answer">Risposta</div>
+                            1. Cos'è questo gioco di scrittura?
+                            <div class="answer">
+                                Questo è un gioco educativo pensato per migliorare la velocità e la precisione nella digitazione. Puoi scegliere testi in diverse lingue, impostare un timer e allenarti digitando le frasi mostrate.
+                            </div>
                         </td>
                     </tr>
                     <tr tabindex="0" class="question">
                         <td>
-                            domanda
-                            <div class="answer">Risposta</div>
+                            2. Posso usare la tastiera del telefono o del tablet?
+                            <div class="answer">
+                                Sì, il gioco è compatibile con dispositivi mobili. Tuttavia, per un'esperienza ottimale consigliamo l’uso di una tastiera fisica.
+                            </div>
                         </td>
                     </tr>
                     <tr tabindex="0" class="question">
                         <td>
-                            domanda
-                            <div class="answer">Risposta</div>
+                            4. Come vengono calcolati i risultati?
+                            <div class="answer">
+                                I risultati vengono calcolati in base alla velocità di digitazione (parole al minuto) e alla precisione (percentuale di errori). Puoi visualizzare le statistiche dopo ogni sessione di gioco.
+                            </div>
                         </td>
                     </tr>
                     <tr tabindex="0" class="question">
                         <td>
-                            domanda
-                            <div class="answer">Risposta</div>
+                            5. Cosa succede se faccio errori durante la digitazione?
+                            <div class="answer">
+                                Se fai errori, il gioco li evidenzierà e sottrarrà punti dalla tua precisione. Tuttavia, puoi correggere gli errori mentre digiti.                                
+                            </div>
                         </td>
                     </tr>
                     <tr tabindex="0" class="question">
                         <td>
-                            domanda
-                            <div class="answer">Risposta</div>
+                            6. Perché il timer non parte quando digito?
+                            <div class="answer">
+                                Il timer inizia a contare solo dopo che hai iniziato a digitare il primo carattere. Assicurati di premere un tasto per avviare il timer.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr tabindex="0" class="question">
+                        <td>
+                            7. Ho trovato un errore o ho un suggerimento. Come posso contattarvi?
+                            <div class="answer">
+                                Puoi contattarci tramite il nostro modulo di contatto disponibile alla fine della pagina. Apprezziamo i tuoi feedback e suggerimenti per migliorare il gioco.
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        
         <script>
             const questions = document.querySelectorAll('.question');
     
@@ -87,8 +99,23 @@
                     answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
                 }
             }
+            
         </script>
-        
-        
+        <div class="ask-box">
+        <textarea id="userQuestion" placeholder="Scrivi qui la tua domanda..." rows="4"></textarea>
+        <button id="sendBtn">Invia</button>
+        </div>
+        <script>
+        document.getElementById('sendBtn').addEventListener('click', () => {
+        const question = document.getElementById('userQuestion').value.trim();
+        if(question) {
+        alert('Domanda inviata: ' + question);
+        document.getElementById('userQuestion').value = '';
+        } 
+        else {
+        alert('Per favore scrivi una domanda prima di inviare.');
+       }});
+        </script>
+
     </body>
 </html>

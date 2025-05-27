@@ -1,25 +1,18 @@
 body{
     font-family: Arial, sans-serif;
-}
-h1 {
-    color: rgb(54, 173, 133);
-    text-align: center;
-}
-.titolo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.logo {
-    width: 100px; 
-    height: auto;
-    border-radius: 8px; 
+    background-image: url("sfondoinfo.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    margin:0;
+    padding: 0;
+    height: 100vh;
 }
 
 .bottoni a{
+    position: absolute;
+    top: 40px; 
+    left: 20px;
     text-decoration: none;
     padding: 10px 15px;
     background-color: rgb(54, 173, 133);
@@ -31,17 +24,22 @@ h1 {
     background-color: blue;
 } 
 pre{
-    background-color: white;
+    margin:auto;
+    background-color: rgba(255, 255, 255, 0.899);
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
     color: black;
     font-size: 16px;
     line-height: 1.6;
-    white-space: pre-wrap;
-    overflow-x: auto;
-    margin-top: 100px;
+    margin-top: 270px;
+    width: 90%;
+    text-align: center;
+    justify-content: center; 
+    align-items: center;     
+    text-align: center;      
+    white-space: normal;  
 }
+
 table {
     margin: 0 auto;
     border-collapse: collapse;
@@ -53,6 +51,7 @@ th, td {
     padding: 10px;
     text-align: left;
     border: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.899);
 }
 
 th {
