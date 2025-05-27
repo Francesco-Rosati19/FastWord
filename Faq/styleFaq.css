@@ -73,7 +73,7 @@ tr:hover {
 }
 .ask-box {
     margin: 50px auto 10px auto; 
-    width: 80%; /* largo 80% dello schermo */
+    width: 50%; /* largo 80% dello schermo */
     background-color: rgba(255, 255, 255, 0.9);
     padding: 20px 30px;
     border-radius: 12px;
@@ -84,7 +84,7 @@ tr:hover {
     display: flex;
     flex-direction: column; /* importantissimo */
     gap: 10px; /* spazio tra elementi */
-    align-items: stretch; /* stretch per far occupare tutta la larghezza */
+    align-items: center; /* centra contenuti orizzontalmente */
 }
 
 
@@ -97,7 +97,7 @@ tr:hover {
 }
 
 .ask-box textarea {
-    flex: 1; /* prende tutto lo spazio possibile */
+    width: 100%; /* prendono tutta la larghezza disponibile */
     resize: none;
     font-family: Arial, sans-serif;
     font-size: 16px;
@@ -124,4 +124,10 @@ tr:hover {
 
 .ask-box button:hover {
     background-color: blue;
+}
+
+#email {
+  height: 30px; /* altezza fissa più bassa */
+  width: 50%; 
+  resize: none; 
 }

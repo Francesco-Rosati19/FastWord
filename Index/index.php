@@ -26,7 +26,7 @@
             <img src="logo.jpg" alt="Logo" class="logo">
         </div>
         <div class="bottoni">
-            <a href="../Faq/faq.html"> FAQ </a>
+            <a href="../Faq/faq.php"> FAQ </a>
             <a href="../Info/info.html"> CHI SIAMO</a>
             <a href="#" class="login"> LOGIN </a>
         </div>    
@@ -72,12 +72,6 @@
                     <div id="loginPasswordError" class="error-message"></div>
                     <button type="submit">Accedi</button>
                 </form>
-                <div class="social-login">
-                    <p>Oppure accedi con:</p>
-                    <button id="googleLogin" type="button">Login con Google</button>
-                    <button id="facebookLogin" type="button">Login con Facebook</button>
-                </div>
-                </div>
             </div>
 
             <!-- REGISTER TAB -->
