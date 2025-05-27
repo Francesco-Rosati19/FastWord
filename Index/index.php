@@ -39,18 +39,17 @@
     <div class="box-container">
         <div class="box" id="box1">
             Imparare e Giocare.
-            Con FastWord tutto è possibile. 
+            Con FastWord tutto è possibile. Il nostro obiettivo è quello di aiutarti a migliorare il tuo vocabolario 
+            e le tue abilità linguistiche in modo divertente e coinvolgente.
         </div>
         <div class="box" id="box2">
-            Ciao
-            Digitare e ragionare allo stesso momento aiuta il ragionamento.
-            Il numero di persone che abbiamo aiutato negli ultimi anni
-            si aggira intorno ai 2000 e il 90% delle persone sono 
-            soddisfatte di aver imparato e giocato con noi
+            Digitare e ragionare contemporaneamente aiuta a migliorare le tue capacità cognitive e la tua velocità di pensiero.
+            Con il nostro gioco, potrai anche migliorare la tua velocità di scrittura e la tua capacità di concentrazione 
         </div>
         <div class="box" id="box3"> 
             Arrivando primo nelle classifiche mensili c'è la possibilità di portarsi a casa un piccolo premio.
-            Quindi impegnati e fai del tuo meglio per riuscire ad aggiudicarti il premio.
+            Quindi impegnati e fai del tuo meglio per riuscire ad aggiudicarti il premio. Ricorda che però devi essere loggato
+            e aver completato almeno 25 partite per provare a vincere
         </div>
             
     </div>
