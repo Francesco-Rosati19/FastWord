@@ -3,6 +3,8 @@
    $passwordError  = $_SESSION['error_message'] ?? null;
    $successMessage = $_SESSION['success_message'] ?? null;
    $month = $_SESSION['ranking_month'] ?? null;
+   
+   $currentMonthNumber = date('n');
 
    // Verifica se l'utente è autenticato
    if (!isset($_SESSION['username'])) {
@@ -18,11 +20,6 @@
    // Connessione al database FastWord
    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
 
-   //parte die da eliminare al massimo sostituire con un errore
-   /*if (!$dbconn) {
-       die("Errore di connessione al database");
-   }*/
-
    // Recupera i dati dell'utente
    $query = "SELECT * FROM utentedati WHERE username = $1";
    $result = pg_query_params($dbconn, $query, array($_SESSION['username']));
@@ -32,6 +29,14 @@
    $query_all_scores = "SELECT punteggio_medio FROM utentedati";
    $result_all_scores = pg_query($dbconn, $query_all_scores);
    
+    $query_punt = "SELECT punteggio_medio FROM utentedati WHERE username = '" . pg_escape_string($_SESSION['username']) . "'";
+    $result = pg_query($dbconn, $query_punt);
+    $punteggio = null;
+
+    if ($result && pg_num_rows($result) > 0) {
+        $row = pg_fetch_assoc($result);
+        $punteggio = $row['punteggio_medio'];
+    }
    // Inizializza i contatori per ogni range
    $range_0_25 = 0;
    $range_26_50 = 0;
@@ -62,18 +67,18 @@
 
    // Prepara i dati per il primo grafico
    $velocitaMesi = [
-       'Gennaio' => (float)$userData['velocita_gennaio'],
-       'Febbraio' => (float)$userData['velocita_febbraio'],
-       'Marzo' => (float)$userData['velocita_marzo'],
-       'Aprile' => (float)$userData['velocita_aprile'],
-       'Maggio' => (float)$userData['velocita_maggio'],
-       'Giugno' => (float)$userData['velocita_giugno'],
-       'Luglio' => (float)$userData['velocita_luglio'],
-       'Agosto' => (float)$userData['velocita_agosto'],
-       'Settembre' => (float)$userData['velocita_settembre'],
-       'Ottobre' => (float)$userData['velocita_ottobre'],
-       'Novembre' => (float)$userData['velocita_novembre'],
-       'Dicembre' => (float)$userData['velocita_dicembre']
+       'Gennaio' => $userData['velocita_gennaio'],
+       'Febbraio' => $userData['velocita_febbraio'],
+       'Marzo' => $userData['velocita_marzo'],
+       'Aprile' => $userData['velocita_aprile'],
+       'Maggio' => $userData['velocita_maggio'],
+       'Giugno' => $userData['velocita_giugno'],
+       'Luglio' => $userData['velocita_luglio'],
+       'Agosto' => $userData['velocita_agosto'],
+       'Settembre' => $userData['velocita_settembre'],
+       'Ottobre' => $userData['velocita_ottobre'],
+       'Novembre' => $userData['velocita_novembre'],
+       'Dicembre' => $userData['velocita_dicembre']
    ];
 
    $precisione = (float)$userData['precisione'];
@@ -116,7 +121,10 @@
                         <canvas id="pieChart"></canvas>
                     </div>
                     <div class="chart-wrapper">
-                        <h3>Distribuzione giocatori</h3>
+                        <h3>Distribuzione giocatori Annuale</h3>    
+                        <div id="punteggio-medio-attuale" style="font-weight: bold; font-size: 1rem;">
+                            Punteggio medio attuale: <span id="valore-punteggio"><?php echo $punteggio ?></span>
+                        </div>                     
                         <canvas id="improvementChart"></canvas>
                     </div>
                 </div>
@@ -217,10 +225,17 @@
                 <form id="rankingForm" method="POST" action="get_ranking.php" onsubmit="showClassifiche('classifiche');">
                     <div class="months-grid">
                         <?php 
-                        $mesi = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
-                        foreach ($mesi as $mese): ?>
-                            <button type="submit" name="month" value="<?= $mese ?>" class="month-btn"><?= ucfirst($mese) ?></button>
-                        <?php endforeach; ?>
+                            $mesi = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+                            $currentMonthNumber = date('n');
+
+                            foreach ($mesi as $index => $mese):
+                                $monthNumber = $index + 1;
+                                $disabled = $monthNumber > $currentMonthNumber ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : '';
+                            ?>
+                                <button type="submit" name="month" value="<?= $mese ?>" class="month-btn" <?= $disabled ?>>
+                                    <?= ucfirst($mese) ?>
+                                </button>
+                            <?php endforeach; ?>
                     </div>
                 </form>
                 <div id="ranking-container" class="ranking-container">
@@ -232,6 +247,7 @@
                                     <th>Posizione</th>
                                     <th>Username</th>
                                     <th>Punteggio</th>
+                                    <th>Partite giocate</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -241,11 +257,12 @@
                                             <td><?= htmlspecialchars($row['position']) ?></td>
                                             <td><?= htmlspecialchars($row['username']) ?></td>
                                             <td><?= htmlspecialchars($row['score']) ?></td>
+                                            <td><?= htmlspecialchars($row['partite'])?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <?= isset($_SESSION['ranking_error']) ? htmlspecialchars($_SESSION['ranking_error']) : "Seleziona un mese per visualizzare la classifica." ?>
                                         </td>
                                     </tr>

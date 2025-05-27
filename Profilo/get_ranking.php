@@ -18,6 +18,28 @@ if (!$month) {
     exit();
 }
 
+// Array mesi (per controllo e indice)
+$mesi = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+$month = strtolower($month);
+
+// Verifica che il mese sia valido
+if (!in_array($month, $mesi)) {
+    $_SESSION['ranking_error'] = "Mese non valido.";
+    header("Location: profilo.php");
+    exit();
+}
+
+// Controlla che il mese non sia nel futuro
+$monthIndex = array_search($month, $mesi);          // indice 0-based del mese richiesto
+$currentMonthIndex = date('n') - 1;                 // indice 0-based mese attuale
+
+if ($monthIndex > $currentMonthIndex) {
+    $_SESSION['ranking_error'] = "Non puoi visualizzare le classifiche di mesi futuri.";
+    header("Location: profilo.php");
+    exit();
+}
+
 // Mappa mese → campo DB
 $monthFieldMap = [
     'gennaio' => 'velocita_gennaio',
@@ -34,16 +56,10 @@ $monthFieldMap = [
     'dicembre' => 'velocita_dicembre'
 ];
 
-if (!array_key_exists($month, $monthFieldMap)) {
-    $_SESSION['ranking_error'] = "Mese non valido.";
-    header("Location: profilo.php");
-    exit();
-}
-
 $field = $monthFieldMap[$month];
 
-// Esegui la query
-$query = "SELECT username, $field as punteggio_medio FROM utentedati ORDER BY $field DESC LIMIT 100";
+// Esegui la query con campo dinamico (attenzione che il campo è predefinito, non direttamente da input)
+$query = "SELECT username, $field as punteggio_medio,giocate FROM utentedati ORDER BY $field DESC LIMIT 100";
 $result = pg_query($dbconn, $query);
 
 if (!$result) {
@@ -56,22 +72,22 @@ if (!$result) {
 $ranking = [];
 $pos = 1;
 while ($row = pg_fetch_assoc($result)) {
+    // Considera anche che punteggio_medio potrebbe essere null, fai controllo se vuoi
     $ranking[] = [
         'position' => $pos++,
         'username' => $row['username'],
-        'score' => $row['punteggio_medio']
+        'score' => $row['punteggio_medio'] ?? 0,
+        'partite' => $row['giocate'] ?? 0
     ];
 }
 
 // Salva nella sessione
 $_SESSION['ranking_data'] = $ranking;
-$_SESSION['ranking_month'] = ucfirst($month);  // Assicurati che venga visualizzato il mese in formato maiuscolo
-unset($_SESSION['ranking_error']);  // Se non ci sono errori
+$_SESSION['ranking_month'] = ucfirst($month);
+unset($_SESSION['ranking_error']);
 
 pg_close($dbconn);
 
-// Redirect a profilo.php
+// Redirect a profilo.php con ancoraggio
 header("Location: profilo.php#classifiche");
 exit();
-
-

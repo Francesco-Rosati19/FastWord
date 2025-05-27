@@ -1,3 +1,11 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['username'])) {
+       header("Location: ../Index/index.php");
+       exit();
+   }
+    
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -217,13 +225,37 @@
         ✅ Precisione: ${accuracy}%<br>
         ✍️ Caratteri corretti: ${correctChars} / ${currentPhrase.length}<br>
         ❌ Errori: ${errorCount}<br>
-        🚀 Velocità: ${wpm} parole/minuto
+        🚀 Velocità: ${wpm} parole/minuto 
       `;
+
+      // Invia i risultati a result.php e poi torna al gioco
+      fetch('result.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+           wpm: wpm ,
+           accuracy: accuracy
+          })
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log('Server response:', data);
+      })
+      .catch(err => {
+        console.error('Errore nell\'invio dei dati:', err);
+        // In ogni caso torna al gioco dopo 3 secondi anche se c’è errore
+        setTimeout(() => {
+          window.location.href = 'gioco.php';
+        }, 3000);
+      });
     }
+
 
     // Listener per l'input dell'utente
     inputArea.addEventListener("keydown", (e) => {
-      e.preventDefault(); // impedosce la scrittura diretta nel campo
+      e.preventDefault(); // impedisce la scrittura diretta nel campo
       if (time === 0) {
         startTimer();
         time++;
