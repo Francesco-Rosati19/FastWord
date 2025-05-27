@@ -22,7 +22,7 @@
     const result = document.getElementById("result");
     const timerDisplay = document.getElementById("timer");
 
-    let currentPhrase = "Questo è un esempio di prova. Se fai il login c'è la possibilità di scegliere la lingua, il tempo e il testo. Ti verranno comunque mostrati i risultati ma non verranno salvati da nessuna parte.";
+    let currentPhrase = "Questo è un esempio di prova. Se fai il login c'è la possibilità di scegliere la lingua, il tempo e il testo. Con l'accesso c'è anche la possibilità di vedere le proprie statistiche e gareggiare contro altri utenti di tutto il mondo";
     let currentIndex = 0;
     let timer;
     let userInput = [];
@@ -81,12 +81,6 @@
       }, 1000);
     }
     
-    function showResults() {
-      const correctChars = userInput.filter((char, idx) => char === currentPhrase[idx]).length;
-      const accuracy = Math.round((correctChars / currentPhrase.length) * 100);
-      result.innerHTML = `⏱️ Tempo scaduto!<br> Precisione: ${accuracy}%<br> Caratteri corretti: ${correctChars} / ${currentPhrase.length} <br> ❌ Errori: ${errorCount}`;
-    }
-
     inputArea.addEventListener("keydown", (e) => {
       e.preventDefault(); // impedisce la scrittura diretta nel campo
       if(time==0){
