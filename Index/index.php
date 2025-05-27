@@ -39,8 +39,7 @@
     <div class="box-container">
         <div class="box" id="box1">
             Imparare e Giocare.
-            Con FastWord tutto è possibile. Vincere premi e portare a casa un pò di soldi non fa male a nessuno.
-            Non fartelo raccontare ma provalo in prima persona
+            Con FastWord tutto è possibile. 
         </div>
         <div class="box" id="box2">
             Ciao
