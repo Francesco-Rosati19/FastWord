@@ -9,23 +9,14 @@ body {
   text-align: center;
   background-color: #f5f5f5;
   margin-top: 150px;
+  background-image: url("sfondo.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  margin:0;
+  padding: 0;
+  height: 100vh;
 }
-.page-title {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 3em;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: aquamarine;
-  text-shadow: 0 0 5px #148f4d, 0 0 10px #00ccaa, 0 0 15px #009988;
-  letter-spacing: 2px;
-}
-
-
-
 
 .nav-btn {
   padding: 10px 20px;
