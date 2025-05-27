@@ -72,6 +72,12 @@
                     <div id="loginPasswordError" class="error-message"></div>
                     <button type="submit">Accedi</button>
                 </form>
+                <div class="social-login">
+                    <p>Oppure accedi con:</p>
+                    <button id="googleLogin" type="button">Login con Google</button>
+                    <button id="facebookLogin" type="button">Login con Facebook</button>
+                </div>
+                </div>
             </div>
 
             <!-- REGISTER TAB -->
@@ -82,6 +88,7 @@
                     <input type="text" name="nome" placeholder="Nome" value="<?= htmlspecialchars($oldRegisterData['nome'] ?? '') ?>" required><br>
                     <input type="text" name="cognome" placeholder="Cognome" value="<?= htmlspecialchars($oldRegisterData['cognome'] ?? '') ?>" required><br>
                     <input type="date" name="data" placeholder="Data di nascita" value="<?= htmlspecialchars($oldRegisterData['data'] ?? '') ?>" required><br>
+                    <div id="dataError" class="error-message"></div>
                     <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($oldRegisterData['email'] ?? '') ?>" required><br>
                     <div id="registerEmailError" class="error-message"></div>
 
@@ -132,10 +139,11 @@
     
             if (!maggiorenne) {
                 e.preventDefault();
-                alert("Devi avere almeno 18 anni per registrarti.");
+                document.getElementById('dataError').textContent = "⚠️Devi avere almeno 18 anni per fare il login";
                 return;
             }
-    
+           document.getElementById('dataError').textContent = "";  
+
            const password = document.getElementById('password').value;
            const confirm = document.getElementById('confirm_password').value;
            let valid = true;

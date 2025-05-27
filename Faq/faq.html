@@ -101,12 +101,11 @@
             }
             
         </script>
-        <div class="ask-box">
+        <div class="ask-box" style="display:flex; flex-direction: column; gap: 10px;">
             <textarea id="userQuestion" placeholder="Scrivi qui la tua domanda..." rows="4"></textarea>
+            <div id="message" style="text-align:center; font-size:16px; color: green; min-height: 24px;"></div>
             <button id="sendBtn">Invia</button>
         </div>
-        <div id="message" style="text-align: center; font-size: 16px; margin-top: 10px;"></div>
-
         <script>
             document.getElementById('sendBtn').addEventListener('click', () => {
                 const question = document.getElementById('userQuestion').value.trim();
