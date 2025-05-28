@@ -53,8 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
         $result1 = pg_query_params($dbconn, $registrazione, array($username, $email, $nome, $cognome, $password_hash, $data));
 
         $registrazione_dati = "INSERT INTO utentedati (username, email, precisione, punteggio_medio, velocita_gennaio, velocita_febbraio, velocita_marzo, velocita_aprile, velocita_maggio,
-        velocita_giugno, velocita_luglio, velocita_agosto, velocita_settembre, velocita_ottobre, velocita_novembre, velocita_dicembre) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)";
-        $result2 = pg_query_params($dbconn, $registrazione_dati, array($username, $email, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+        velocita_giugno, velocita_luglio, velocita_agosto, velocita_settembre, velocita_ottobre, velocita_novembre, velocita_dicembre,giocate,mese_corrente) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,$17,$18)";
+        $result2 = pg_query_params($dbconn, $registrazione_dati, array($username, $email, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,'00'));
 
         // Entrembe le query hanno avuto successo
         if ($result1 && $result2) {

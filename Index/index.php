@@ -70,7 +70,26 @@
                     <div id="loginEmailError" class="error-message"></div>
                     <input type="password" name="password" placeholder="Password" required><br>
                     <div id="loginPasswordError" class="error-message"></div>
-                    <button type="submit">Accedi</button>
+                    <!-- Carica il client di Google Identity Services -->
+                    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+                    <!-- Pulsante di login con google -->
+                    <div id="g_id_onload"
+                        data-client_id="29896433443-op7hun0hru4088oloejcpoj1aui21s8u.apps.googleusercontent.com"
+                        data-context="signin"
+                        data-ux_mode="redirect"
+                        data-login_uri="http://localhost:3000/FastWord/Login/google-callback.php"
+                        data-auto_prompt="false">
+                    </div>
+
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="rectangular"
+                        data-theme="outline"
+                        data-text="sign_in_with"
+                        data-size="large">
+                    </div>
+                      <button type="submit">Accedi</button>
                 </form>
             </div>
 

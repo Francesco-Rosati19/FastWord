@@ -1,90 +1,95 @@
 <?php
-   session_start();
-   $passwordError  = $_SESSION['error_message'] ?? null;
-   $successMessage = $_SESSION['success_message'] ?? null;
-   $month = $_SESSION['ranking_month'] ?? null;
-   
-   $currentMonthNumber = date('n');
+    session_start();
 
-   // Verifica se l'utente è autenticato
-   if (!isset($_SESSION['username'])) {
-       header("Location: ../Index/index.php");
-       exit();
-   }
+    $passwordError  = $_SESSION['error_message'] ?? null;
+    $successMessage = $_SESSION['success_message'] ?? null;
+    $month = $_SESSION['ranking_month'] ?? null;
 
-   if (isset($_POST['month'])) {
-        // Salva il mese selezionato nella sessione
+    $messag=$_SESSION['message'] ?? null;
+
+    $currentMonthNumber = date('n');
+
+    // Verifica se l'utente è autenticato
+    if (!isset($_SESSION['email'])) {
+        header("Location: ../Index/index.php");
+        exit();
+    }
+
+    // Salva il mese selezionato nella sessione
+    if (isset($_POST['month'])) {
         $_SESSION['ranking_month'] = $_POST['month'];
     }
-   
-   // Connessione al database FastWord
-   $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
 
-   // Recupera i dati dell'utente
-   $query = "SELECT * FROM utentedati WHERE username = $1";
-   $result = pg_query_params($dbconn, $query, array($_SESSION['username']));
-   $userData = pg_fetch_assoc($result);
-
-   // Recupera i punteggi medi di tutti gli utenti per il terzo grafico
-   $query_all_scores = "SELECT punteggio_medio FROM utentedati";
-   $result_all_scores = pg_query($dbconn, $query_all_scores);
-   
-    $query_punt = "SELECT punteggio_medio FROM utentedati WHERE username = '" . pg_escape_string($_SESSION['username']) . "'";
-    $result = pg_query($dbconn, $query_punt);
-    $punteggio = null;
-
-    if ($result && pg_num_rows($result) > 0) {
-        $row = pg_fetch_assoc($result);
-        $punteggio = $row['punteggio_medio'];
+    // Connessione al database FastWord
+    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
+    if (!$dbconn) {
+        die("Errore di connessione al database.");
     }
-   // Inizializza i contatori per ogni range
-   $range_0_25 = 0;
-   $range_26_50 = 0;
-   $range_51_75 = 0;
-   $range_76_100 = 0;
-   $total_users = 0;
 
-   // Calcola le percentuali per ogni range
-   while ($row = pg_fetch_assoc($result_all_scores)) {
-       $score = (float)$row['punteggio_medio'];
-       if ($score >= 0 && $score <= 25) {
-           $range_0_25++;
-       } elseif ($score <= 50) {
-           $range_26_50++;
-       } elseif ($score <= 75) {
-           $range_51_75++;
-       } else {
-           $range_76_100++;
-       }
-       $total_users++;
-   }
+    // Recupera i dati dell'utente
+    $query = "SELECT * FROM utentedati WHERE email = $1";
+    $result = pg_query_params($dbconn, $query, [$_SESSION['email']]);
+    $userData = pg_fetch_assoc($result);
+                                                        
+    // Verifica se i dati dell'utente sono stati trovati
+    if (!$userData) {
+        die("⚠️ Dati utente non trovat1234. Controlla che l'utente esista in 'utentedati'.");
+    }
 
-   // Calcola le percentuali
-   $percent_0_25 = ($range_0_25 / $total_users) * 100;
-   $percent_26_50 = ($range_26_50 / $total_users) * 100;
-   $percent_51_75 = ($range_51_75 / $total_users) * 100;
-   $percent_76_100 = ($range_76_100 / $total_users) * 100;
+    // Punteggio dell'utente (già presente in $userData)
+    $punteggio = $userData['punteggio_medio'];
 
-   // Prepara i dati per il primo grafico
-   $velocitaMesi = [
-       'Gennaio' => $userData['velocita_gennaio'],
-       'Febbraio' => $userData['velocita_febbraio'],
-       'Marzo' => $userData['velocita_marzo'],
-       'Aprile' => $userData['velocita_aprile'],
-       'Maggio' => $userData['velocita_maggio'],
-       'Giugno' => $userData['velocita_giugno'],
-       'Luglio' => $userData['velocita_luglio'],
-       'Agosto' => $userData['velocita_agosto'],
-       'Settembre' => $userData['velocita_settembre'],
-       'Ottobre' => $userData['velocita_ottobre'],
-       'Novembre' => $userData['velocita_novembre'],
-       'Dicembre' => $userData['velocita_dicembre']
-   ];
+    // Inizializza i contatori per ogni range
+    $query_all_scores = "SELECT punteggio_medio FROM utentedati";
+    $result_all_scores = pg_query($dbconn, $query_all_scores);
 
-   $precisione = (float)$userData['precisione'];
-   $punteggioMedio = (float)$userData['punteggio_medio'];
+    $range_0_25 = 0;
+    $range_26_50 = 0;
+    $range_51_75 = 0;
+    $range_76_100 = 0;
+    $total_users = 0;
 
+    // Calcola le percentuali per ogni range
+    while ($row = pg_fetch_assoc($result_all_scores)) {
+        $score = (float)$row['punteggio_medio'];
+        if ($score >= 0 && $score <= 25) {
+            $range_0_25++;
+        } elseif ($score <= 50) {
+            $range_26_50++;
+        } elseif ($score <= 75) {
+            $range_51_75++;
+        } else {
+            $range_76_100++;
+        }
+        $total_users++;
+    }
+
+    // Calcola le percentuali
+    $percent_0_25 = $total_users ? ($range_0_25 / $total_users) * 100 : 0;
+    $percent_26_50 = $total_users ? ($range_26_50 / $total_users) * 100 : 0;
+    $percent_51_75 = $total_users ? ($range_51_75 / $total_users) * 100 : 0;
+    $percent_76_100 = $total_users ? ($range_76_100 / $total_users) * 100 : 0;
+
+    // Prepara i dati per il grafico di velocità
+    $velocitaMesi = [
+        'Gennaio' => $userData['velocita_gennaio'],
+        'Febbraio' => $userData['velocita_febbraio'],
+        'Marzo' => $userData['velocita_marzo'],
+        'Aprile' => $userData['velocita_aprile'],
+        'Maggio' => $userData['velocita_maggio'],
+        'Giugno' => $userData['velocita_giugno'],
+        'Luglio' => $userData['velocita_luglio'],
+        'Agosto' => $userData['velocita_agosto'],
+        'Settembre' => $userData['velocita_settembre'],
+        'Ottobre' => $userData['velocita_ottobre'],
+        'Novembre' => $userData['velocita_novembre'],
+        'Dicembre' => $userData['velocita_dicembre']
+    ];
+
+    $precisione = (float)$userData['precisione'];
+    $punteggioMedio = (float)$userData['punteggio_medio'];
 ?>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -133,6 +138,11 @@
             <!--dati personali-->
             <div id="dati-personali" class="content-section">
                 <h2>Dati Personali</h2>
+                <?php if ($messag=== true): ?>
+                    <span class="session-message" style="color: green; font-weight: bold; margin-left: 15px;">
+                        <label>Per default la tua password è "1default"<label>
+                    </span>
+                <?php endif; ?>
                 <div id="successMessage" class="success-message hidden">Password cambiata con successo!</div>
                 <form id="personalDataForm" class="personal-data-form">
                     <div class="form-group">
