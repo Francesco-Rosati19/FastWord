@@ -16,6 +16,7 @@ body {
   margin:0;
   padding: 0;
   height: 100vh;
+  
 }
 
 .nav-btn {
@@ -26,11 +27,21 @@ body {
   border-radius: 5px;
   transition: background-color 0.2s;
   border: none;
+  font-weight: bold;
 }
 
 .nav-btn:hover {
   background-color: rgb(45, 153, 123);
 }
+
+.home-btn {
+  display: inline-block;
+  margin-top: 40px; 
+  margin-left: -1000px;
+  position: relative;
+  left: 0;
+}
+
 
 .game-header {
   width: 100%;
@@ -109,6 +120,7 @@ body {
 #timer {
   font-size: 22px;
   margin: 20px;
+  margin-top: 100px;
 }
 
 #result {
