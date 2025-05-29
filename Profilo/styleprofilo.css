@@ -386,6 +386,80 @@
             background-color: blue;
             color: white;
         }
+        @media (max-width: 1024px) {
+        .charts-container {
+        grid-template-columns: 1fr;
+        }
 
+        .months-grid {
+        grid-template-columns: repeat(2, 1fr);
+        }
 
-        /*------------------------------------------*/
+        .sottotitoli {
+        font-size: 4vw;
+        }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .menu {
+        width: 100%;
+        text-align: center;
+    }
+
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+
+    .personal-data-form {
+        width: 95%;
+    }
+
+    .months-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sottotitoli {
+        font-size: 5vw;
+    }
+
+    .popup {
+        width: 90%;
+    }
+
+    .link-utile {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .months-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .menu a {
+        font-size: 14px;
+    }
+
+    .month-btn {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .home-button, .game-button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .sottotitoli {
+        font-size: 6vw;
+    }
+
+    img.immagine {
+        width: 80%;
+    }
+}
