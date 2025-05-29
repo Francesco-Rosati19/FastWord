@@ -106,8 +106,8 @@
     }
 
     function restartGame() {
-      resetInputAndStats();     // Riavvia solo input, errori e visualizzazione
-      resetTimerDisplay();      // Riavvia il timer
+      resetInputAndStats();     
+      resetTimerDisplay();     
     }
 
 

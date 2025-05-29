@@ -1,57 +1,65 @@
-body{
+/* IMPOSTAZIONI GENERALI */
+body {
     font-family: Arial, sans-serif;
     background-image: url("sfondoinfo.jpg");
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
-    margin:0;
+    margin: 0;
     padding: 0;
-    height: 60vh;
+    min-height: 100vh;
 }
 
-.bottoni a{
+/* BOTTONE IN ALTO A SINISTRA */
+.bottoni a {
     position: absolute;
-    top: 40px; 
+    top: 20px;
     left: 20px;
     text-decoration: none;
     padding: 10px 15px;
     background-color: rgb(54, 173, 133);
-    color:white;    
+    color: white;
     border-radius: 5px;
     font-weight: bold;
+    font-size: 1rem;
+    z-index: 100;
 }
+
 .bottoni a:hover {
     background-color: blue;
-} 
-pre{
-    margin:auto;
+}
+
+/* BLOCCO DI TESTO CENTRALE */
+pre {
+    margin: auto;
     background-color: rgba(255, 255, 255, 0.899);
     padding: 30px;
     border-radius: 12px;
     color: black;
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.6;
-    margin-top: 190px;
+    margin-top: 20vh;
     width: 90%;
+    max-width: 800px;
     text-align: center;
-    justify-content: center; 
-    align-items: center;     
-    text-align: center;      
-    white-space: normal;  
+    white-space: normal;
+    box-sizing: border-box;
 }
 
+/* TABELLA */
 table {
-    margin: 0 auto;
+    margin: 50px auto 20px auto;
     border-collapse: collapse;
-    width: 60%;
-    margin-top:50px;
+    width: 90%;
+    max-width: 800px;
 }
 
 th, td {
-    padding: 10px;
+    padding: 12px;
     text-align: left;
     border: 1px solid #ccc;
     background-color: rgba(255, 255, 255, 0.899);
+    font-size: 1rem;
 }
 
 th {
@@ -59,3 +67,46 @@ th {
     color: white;
 }
 
+/* ------------------- MEDIA QUERIES ------------------- */
+@media (max-width: 768px) {
+    .bottoni a {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        top: 15px;
+        left: 15px;
+    }
+
+    pre {
+        font-size: 0.95rem;
+        padding: 20px;
+        margin-top: 15vh;
+    }
+
+    table, th, td {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bottoni a {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+        top: 10px;
+        left: 10px;
+    }
+
+    pre {
+        font-size: 0.9rem;
+        padding: 15px;
+        margin-top: 10vh;
+    }
+
+    table {
+        width: 95%;
+    }
+
+    th, td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
