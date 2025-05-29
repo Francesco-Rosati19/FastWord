@@ -47,7 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["new_
 
         if ($result) {
             $success_message = "Password aggiornata con successo!";
-            // pulisco i dati
             $email = $new_password = $confirm_password = '';
         } else {
             $email_error = "Errore durante l'aggiornamento della password.";
@@ -76,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["new_
         <script>
             setTimeout(function() {
                 window.location.href = "../Index/index.php";
-            }, 4000);
+            }, 3000);
         </script>
     <?php else: ?>
         <h2>Reset della password</h2>

@@ -71,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
         <form action="" method="post">
             <label for="email">Inserisci la tua email per il reset:</label>
             <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required />
+            <br><br>
             <?php if ($email_error): ?>
                 <div class="error-message"><?= $email_error ?></div>
             <?php endif; ?>
