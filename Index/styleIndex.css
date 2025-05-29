@@ -6,7 +6,7 @@ body {
     background-attachment: fixed;
     margin:0;
     padding: 0;
-    height: 100vh;
+    height: 10vh;
 
 }
 .container{
@@ -73,13 +73,12 @@ body {
 /*BOX DI SCRITTURA*/
 .box-container{
     position: relative;
-    width: 100%;
     height: 900px;
     margin-top: 30vh;
 }
 .box {
     position: absolute;
-    width: 35vw; /* Responsive width */
+    width: 20vw; /* Responsive width */
     min-width: 250px;
     max-width: 400px;
     padding: 3vw;
@@ -103,9 +102,6 @@ body {
     top:700px;
     left:30px;
 }
-
-
-
 /*------------------------------------------------------------------------*/
 
 /*POPUP DI REGISTRAZIONE E LOGIN*/
@@ -190,7 +186,7 @@ body {
 }
 /*-----------------------------------------------------------*/
 
-/*LAYOUT ACCESSO CON FACEBOOK O GOOGLE*/
+/*LAYOUT ACCESSO CON GOOGLE*/
 .social-login {
   margin-top: 20px;
   text-align: center;
@@ -209,12 +205,6 @@ body {
   background-color: #db4437;
   color: white;
 }
-
-#facebookLogin {
-  background-color: #3b5998;
-  color: white;
-}
-
 
 /*LAYOUT PASSWORD E CONFERMA*/
 .password-wrapper {
@@ -307,3 +297,50 @@ body {
       font-weight: bold;
     }
 /*-----------------------------------------------------------*/
+@media (max-width: 768px) {
+    .logo {
+        width: 90px;
+        height: 90px;
+    }
+
+    .box {
+        font-size: 0.9rem;
+    }
+
+    .tab-button {
+        font-size: 0.9rem;
+    }
+
+    .prova a {
+        padding: 4vh 10vw;
+        font-size: 4vw;
+    }
+
+    .bottoni {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .popup-content, .modal-content {
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo {
+        margin-bottom: 1rem;
+    }
+
+    .prova {
+        margin-top: 5vh;
+    }
+
+    .box {
+        padding: 1.5rem;
+    }
+}
