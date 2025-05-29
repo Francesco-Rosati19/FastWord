@@ -15,6 +15,7 @@ body {
   margin:0;
   padding: 0;
   height: 100vh;
+  margin-top: 40px;
 }
 
 .container {
@@ -42,6 +43,7 @@ body {
   border-radius: 5px;
   transition: background-color 0.2s;
   border: none;
+  font-weight: bold;
 }
 
 .nav-btn:hover {
@@ -79,8 +81,8 @@ body {
 #gameBox {
   margin-top: 200px;
   width: 70%;
-  max-width: 700px;
-  height: 200px;
+  max-width: 1000px;
+  height: 300px;
   margin: 0 auto;
   border-radius: 10px;
   border: 2px solid #ccc;

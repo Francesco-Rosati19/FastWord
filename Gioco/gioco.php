@@ -50,7 +50,7 @@
     <div id="gameBox" onclick="inputArea.focus()"></div>
     <input type="text" id="inputArea" autofocus />
     <div id="result"></div>
-    <button class="nav-btn" onclick="startGame()">Reset</button>
+    <button class="nav-btn" onclick="restartGame()">Reset</button>
   </div>
 
   <script>
@@ -104,6 +104,12 @@
       loadRandomPhrase();
       resetTimerDisplay();
     }
+
+    function restartGame() {
+      resetInputAndStats();     // Riavvia solo input, errori e visualizzazione
+      resetTimerDisplay();      // Riavvia il timer
+    }
+
 
     document.getElementById("textSelect").addEventListener("change", function () {
       resetTimerDisplay();
