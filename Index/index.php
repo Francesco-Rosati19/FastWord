@@ -62,7 +62,7 @@
                 <button class="tab-button active" onclick="showTab('loginTab')">Accedi</button>
                 <button class="tab-button" onclick="showTab('registerTab')">Registrati</button>
             </div>
-
+        
             <!-- LOGIN TAB -->
             <div id="loginTab" class="tab-content">
                 <form action="../Login/login.php" method="POST">
@@ -177,40 +177,6 @@
             );
             if (activeButton) activeButton.classList.add('active');
         }
-        /*Controllo data e controllo password*/
-        document.getElementById("registerForm").addEventListener("submit", function(e) {
-            const dataNascita = new Date(this.data.value);
-            const oggi = new Date();
-            const eta = oggi.getFullYear() - dataNascita.getFullYear();
-            const m = oggi.getMonth() - dataNascita.getMonth();
-            const maggiorenne = (eta > 18 || (eta === 18 && (m > 0 || (m === 0 && oggi.getDate() >= dataNascita.getDate()))));
-    
-            if (!maggiorenne) {
-                e.preventDefault();
-                document.getElementById('dataError').textContent = "⚠️Devi avere almeno 18 anni per fare il login";
-                return;
-            }
-           document.getElementById('dataError').textContent = "";  
-
-           const password = document.getElementById('password').value;
-           const confirm = document.getElementById('confirm_password').value;
-           let valid = true;
-
-           if (password.length < 8) {
-              document.getElementById('passwordError').textContent = "⚠️La password deve contenere almeno 8 caratteri.";
-              valid = false;
-           }
-
-           if (password !== confirm) {
-               document.getElementById('confirmError').textContent = "⚠️Le password non coincidono.";
-               valid = false;
-            }
-
-            if (!valid) e.preventDefault(); // Blocca l'invio solo se ci sono errori
-
-            
-        });
-        /*ICONE PASSWORD*/
         function togglePassword(id, icon) {
             const field = document.getElementById(id);
             if (field.type === "password") {
@@ -246,6 +212,41 @@
             else
                 document.getElementById('registerEmailError').textContent = "⚠️ Email già registrata. Usa un'altra email.";
         }
+        /*Controllo data e controllo password*/
+        document.getElementById("registerForm").addEventListener("submit", function(e) {
+            const dataNascita = new Date(this.data.value);
+            const oggi = new Date();
+            const eta = oggi.getFullYear() - dataNascita.getFullYear();
+            const m = oggi.getMonth() - dataNascita.getMonth();
+            const maggiorenne = (eta > 18 || (eta === 18 && (m > 0 || (m === 0 && oggi.getDate() >= dataNascita.getDate()))));
+    
+            if (!maggiorenne) {
+                e.preventDefault();
+                document.getElementById('dataError').textContent = "⚠️Devi avere almeno 18 anni per fare il login";
+                return;
+            }
+           document.getElementById('dataError').textContent = "";  
+
+           const password = document.getElementById('password').value;
+           const confirm = document.getElementById('confirm_password').value;
+           let valid = true;
+
+           if (password.length < 8) {
+              document.getElementById('passwordError').textContent = "⚠️La password deve contenere almeno 8 caratteri.";
+              valid = false;
+           }
+
+           if (password !== confirm) {
+               document.getElementById('confirmError').textContent = "⚠️Le password non coincidono.";
+               valid = false;
+            }
+
+            if (!valid) e.preventDefault(); // Blocca l'invio solo se ci sono errori
+
+            
+        });
+        /*ICONE PASSWORD*/
+        
     </script>
 </body>
 </html>

@@ -34,12 +34,6 @@ if (!in_array($month, $mesi)) {
 $monthIndex = array_search($month, $mesi);          // indice 0-based del mese richiesto
 $currentMonthIndex = date('n') - 1;                 // indice 0-based mese attuale
 
-if ($monthIndex > $currentMonthIndex) {
-    $_SESSION['ranking_error'] = "Non puoi visualizzare le classifiche di mesi futuri.";
-    header("Location: profilo.php");
-    exit();
-}
-
 // Mappa mese → campo DB
 $monthFieldMap = [
     'gennaio' => 'velocita_gennaio',
@@ -58,7 +52,6 @@ $monthFieldMap = [
 
 $field = $monthFieldMap[$month];
 
-// Esegui la query con campo dinamico (attenzione che il campo è predefinito, non direttamente da input)
 $query = "SELECT username, $field as punteggio_medio,giocate FROM utentedati ORDER BY $field DESC LIMIT 100";
 $result = pg_query($dbconn, $query);
 
@@ -72,7 +65,6 @@ if (!$result) {
 $ranking = [];
 $pos = 1;
 while ($row = pg_fetch_assoc($result)) {
-    // Considera anche che punteggio_medio potrebbe essere null, fai controllo se vuoi
     $ranking[] = [
         'position' => $pos++,
         'username' => $row['username'],

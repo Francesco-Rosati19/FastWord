@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["new_
 <head>
     <meta charset="UTF-8" />
     <title>Aggiorna Password</title>
-    <link rel="stylesheet" href="styleReset.css" />
+    <link rel="stylesheet" href="styleDimenticata.css" />
 </head>
 <body>
     <div class="container">
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["new_
     <?php if ($success_message): ?>
         <h2><?= $success_message ?></h2>
         <p>Aggiornamento della password avvenuto con successo, tornerai al login tra pochi secondi</p>
-        <script>
+        <script>    
             setTimeout(function() {
                 window.location.href = "../Index/index.php";
             }, 3000);
