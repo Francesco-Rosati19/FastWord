@@ -78,7 +78,6 @@ body {
 }
 .box {
     position: absolute;
-    width: 20vw; /* Responsive width */
     min-width: 250px;
     max-width: 400px;
     padding: 3vw;
