@@ -23,7 +23,8 @@
     // Connessione al database FastWord
     $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
     if (!$dbconn) {
-        die("Errore di connessione al database.");
+         header("Location: ../Index/index.php");
+         exit();
     }
 
     // Recupera i dati dell'utente
@@ -33,7 +34,8 @@
                                                         
     // Verifica se i dati dell'utente sono stati trovati
     if (!$userData) {
-        die("⚠️ Dati utente non trovat1234. Controlla che l'utente esista in 'utentedati'.");
+        header("Location: ../Index/index.php");
+        exit();
     }
 
     // Punteggio dell'utente (già presente in $userData)
