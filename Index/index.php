@@ -89,10 +89,26 @@
                         data-text="sign_in_with"
                         data-size="large">
                     </div>
-                      <button type="submit">Accedi</button>
+                     <button type="submit">Accedi</button> 
                 </form>
+                <br>  
+                    <a href="#" onclick="openModal()" style="margin-top:10px">Password dimenticata?</a>
+                        <!-- Popup recupero password -->
+                        <div id="myModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeModal()">&times;</span>
+                                <h3>Recupera password</h3>
+                                <p>Inserisci la tua email:</p>
+                            
+                                <form id="passwordForm" method="POST" action="../Login/password_dimenticata.php">
+                                    <input type="email" name="email" id="emailInput" placeholder="Email" required>
+                                    <br>
+                                <button type="submit">Invia</button>
+                                </form>
+                            </div>
+                        </div>             
             </div>
-
+                    
             <!-- REGISTER TAB -->
             <div id="registerTab" class="tab-content hidden">
                 <form id="registerForm" action="../Login/register.php" method="POST">
@@ -123,6 +139,25 @@
       </div>
     </div>
     <script>
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+            document.getElementById("passwordForm").style.display = "block";
+            document.getElementById("confirmation-message").style.display = "none";
+            document.getElementById("emailInput").value = "";
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        // Chiudi cliccando fuori
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+            closeModal();
+            }
+        }
+
         document.querySelector('.login').addEventListener('click', function(event) {
             event.preventDefault();
             togglePopup();
