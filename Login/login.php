@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
     header("Content-Type: application/json");
     exit();
 } else {
-    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
+    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=123rosati");
 
     if ($dbconn) {
         $email = $_POST['email'];

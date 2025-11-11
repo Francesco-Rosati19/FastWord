@@ -1,6 +1,6 @@
 <?php
 session_start();
-$dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
+$dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=123rosati");
 
 // Recupera username dalla sessione
 $username = $_SESSION['username'] ?? null;
@@ -50,22 +50,33 @@ $meseCorrente = $row['mese_corrente'];
 $velocitaAttuale = (float)$row[$colVelocita];
 $precisioneAttuale = (float)$row['precisione'];
 
+// Controllo nuovo mese
 if ($meseCorrente !== $meseNumero) {
     // Nuovo mese: reset giocate e precisione
     $giocate = 1;
     $nuovaVelocita = $wpm;
     $nuovaPrecisione = $accuracy;
-
-    $updateQuery = "UPDATE $tabella SET $colVelocita = $1, giocate = $2, mese_corrente = $3, precisione = $4 WHERE username = $5";
-    $updateResult = pg_query_params($dbconn, $updateQuery, [$nuovaVelocita, $giocate, $meseNumero, $nuovaPrecisione, $username]);
 } else {
     // Stesso mese: calcola media ponderata
     $giocate++;
     $nuovaVelocita = ($velocitaAttuale * ($giocate - 1) + $wpm) / $giocate;
     $nuovaPrecisione = ($precisioneAttuale * ($giocate - 1) + $accuracy) / $giocate;
+}
 
-    $updateQuery = "UPDATE $tabella SET $colVelocita = $1, giocate = $2, precisione = $3 WHERE username = $4";
-    $updateResult = pg_query_params($dbconn, $updateQuery, [$nuovaVelocita, $giocate, $nuovaPrecisione, $username]);
+// Calcolo del punteggio medio
+$nuovoPunteggio = $nuovaVelocita * ($nuovaPrecisione / 100);
+
+// Aggiorna la tabella
+if ($meseCorrente !== $meseNumero) {
+    $updateQuery = "UPDATE $tabella 
+                    SET $colVelocita = $1, giocate = $2, mese_corrente = $3, precisione = $4, punteggio_medio = $5
+                    WHERE username = $6";
+    $updateResult = pg_query_params($dbconn, $updateQuery, [$nuovaVelocita, $giocate, $meseNumero, $nuovaPrecisione, $nuovoPunteggio, $username]);
+} else {
+    $updateQuery = "UPDATE $tabella 
+                    SET $colVelocita = $1, giocate = $2, precisione = $3, punteggio_medio = $4
+                    WHERE username = $5";
+    $updateResult = pg_query_params($dbconn, $updateQuery, [$nuovaVelocita, $giocate, $nuovaPrecisione, $nuovoPunteggio, $username]);
 }
 
 if ($updateResult) {

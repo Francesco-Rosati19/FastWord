@@ -18,7 +18,7 @@ if (isset($_POST['credential'])) {
         alert("Dati utente non presenti nel token.");
     }
     
-    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
+    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=123rosati");
     if (!$dbconn) {
         alert("Connessione al DB fallita.");
     }

@@ -21,7 +21,7 @@
     }
 
     // Connessione al database FastWord
-    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
+    $dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=123rosati");
     if (!$dbconn) {
          header("Location: ../Index/index.php");
          exit();

@@ -78,7 +78,7 @@
                         data-client_id="29896433443-op7hun0hru4088oloejcpoj1aui21s8u.apps.googleusercontent.com"
                         data-context="signin"
                         data-ux_mode="redirect"
-                        data-login_uri="http://localhost:3000/FastWord/Login/google-callback.php"
+                        data-login_uri="http://localhost:3000/Login/google-callback.php"
                         data-auto_prompt="false">
                     </div>
 

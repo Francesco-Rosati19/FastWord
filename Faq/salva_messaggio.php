@@ -1,6 +1,6 @@
 <?php
 session_start();
-$dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=rootpassword");
+$dbconn = pg_connect("host=localhost port=5432 dbname=FastWord user=postgres password=123rosati");
 
 if (isset($_POST['userQuestion']) && trim($_POST['userQuestion']) !== '') {
     $userQuestion = trim($_POST['userQuestion']);
