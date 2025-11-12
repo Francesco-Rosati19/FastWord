@@ -29,7 +29,8 @@ if (isset($_POST['credential'])) {
         $nome = $payload['given_name'] ?? '';
         $cognome = $payload['family_name'] ?? '';
         $username = explode('@', $email)[0];
-        $data_nascita = $payload['birthday'] ?? '';
+        $data_reg = date('Y-m-d');
+        $data_nascita = $data_reg;
         $password="1default";
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 

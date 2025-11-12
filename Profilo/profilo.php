@@ -143,7 +143,10 @@
                 <?php if ($messag=== true): ?>
                     <span class="session-message" style="color: green; font-weight: bold; margin-left: 15px;">
                         <label>Per default la tua password è "1default"<label>
+                        <br>
+                        <label>Per default la data di nascita corrisponde alla data di registrazione</label>
                     </span>
+                    <?php unset($_SESSION['message']);?>
                 <?php endif; ?>
                 <div id="successMessage" class="success-message hidden">Password cambiata con successo!</div>
                 <form id="personalDataForm" class="personal-data-form">
