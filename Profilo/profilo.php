@@ -177,6 +177,9 @@
                             <button type="button" class="modify-password-btn" onclick="togglePopup()">Modifica Password</button>
                         </div>
                     </div>
+                    <div class="form-group delete-account-group" style="text-align: center; margin-top: 20px;">
+                        <button type="button" class="delete-account-btn" onclick="confirmDelete()">🗑️ Elimina Account</button>
+                    </div>
                 </form>
             <!--form modifica della password-->
                 <!-- Overlay + Popup -->
@@ -207,6 +210,18 @@
                             </div>
                         </div>
                     </div>
+            </div>
+            <!------POPUP DELLA CANCELLAZIONE DELL'ACCOUNT"--->
+            <div id="deletePopup" class="popup-overlay hidden">
+                <div class="popup">
+                    <div class="popup-content">
+                        <h3>Sei sicuro di voler cancellare l'account?</h3>
+                        <div style="margin-top: 20px; display: flex; justify-content: space-around;">
+                            <button type="button" class="confirm-btn" onclick="deleteAccount()">Sì</button>
+                            <button type="button" class="cancel-btn" onclick="toggleDeletePopup()">No</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--apprendimento-->
 
@@ -444,6 +459,26 @@
         new Chart(document.getElementById('pieChart'), pieConfig);
         new Chart(document.getElementById('improvementChart'), improvementConfig);
     };
+    // Popup eliminazione account
+    function confirmDelete() {
+        document.getElementById('deletePopup').classList.remove('hidden');
+    }
+    function toggleDeletePopup() {
+        document.getElementById('deletePopup').classList.add('hidden');
+    }
+    function deleteAccount() {
+        fetch('delete_account.php', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '../Index/index.php';
+                } else {
+                    alert('Errore durante l’eliminazione dell’account.');
+                }
+            })
+            .catch(() => alert('Errore di connessione al server.'));
+    };
+
     </script>
 </body>
 </html> 

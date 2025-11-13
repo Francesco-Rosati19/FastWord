@@ -463,3 +463,40 @@
         width: 80%;
     }
 }
+    /*Stili per la cancellazione dell'account*/
+    .delete-account-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    }
+    .delete-account-btn:hover {
+        background-color: #c0392b;
+    }
+
+    .confirm-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .cancel-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .popup-overlay.hidden {
+        display: none;
+    }
+
+
